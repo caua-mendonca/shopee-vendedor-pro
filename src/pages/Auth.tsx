@@ -57,7 +57,7 @@ export default function Auth() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-lg"
+        className="w-full max-w-md rounded-2xl border border-border bg-card card-gradient-accent p-8 shadow-lg"
       >
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3">

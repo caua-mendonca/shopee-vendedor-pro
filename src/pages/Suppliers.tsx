@@ -23,7 +23,7 @@ export default function Suppliers() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {suppliers.map((s, i) => (
           <motion.div key={s.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-            className="rounded-xl border border-border bg-card p-5 transition-shadow hover:shadow-md">
+            className="rounded-xl border border-border bg-card card-gradient p-5 transition-shadow hover:shadow-md">
             <div className="mb-3 flex items-center gap-3">
               <div className="rounded-lg bg-accent p-2"><Factory className="h-5 w-5 text-primary" /></div>
               <h3 className="font-semibold text-card-foreground">{s.name}</h3>
