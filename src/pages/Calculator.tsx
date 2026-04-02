@@ -57,7 +57,7 @@ export default function Calculator() {
       <div className="grid gap-6 lg:grid-cols-5">
         {/* Custos e Taxas */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="lg:col-span-3 rounded-xl border border-border bg-card p-6">
+          className="lg:col-span-3 rounded-xl border border-border bg-card card-gradient p-6">
           <div className="mb-5 flex items-center gap-2">
             <FileText className="h-5 w-5 text-muted-foreground" />
             <h3 className="text-base font-semibold text-card-foreground">Custos e Taxas</h3>
@@ -87,7 +87,7 @@ export default function Calculator() {
 
         {/* Resultado */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className="lg:col-span-2 rounded-xl border border-border bg-card p-6">
+          className="lg:col-span-2 rounded-xl border border-border bg-card card-gradient p-6">
           <h3 className="mb-5 text-base font-semibold text-card-foreground">Resultado</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between text-sm">

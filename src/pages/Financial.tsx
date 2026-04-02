@@ -53,7 +53,7 @@ export default function Financial() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-xl border border-border bg-card p-5">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-xl border border-border bg-card card-gradient p-5">
           <h3 className="mb-4 text-base font-semibold text-card-foreground">Lucro por Produto</h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={profitByProduct} layout="vertical">
@@ -66,7 +66,7 @@ export default function Financial() {
           </ResponsiveContainer>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card p-5">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card card-gradient p-5">
           <h3 className="mb-4 text-base font-semibold text-card-foreground">Composição dos Gastos</h3>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
@@ -83,7 +83,7 @@ export default function Financial() {
       </div>
 
       {/* Detail Table */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="overflow-x-auto rounded-xl border border-border bg-card">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="overflow-x-auto rounded-xl border border-border bg-card card-gradient">
         <div className="p-5 pb-0">
           <h3 className="text-base font-semibold text-card-foreground">Detalhamento por Produto</h3>
         </div>

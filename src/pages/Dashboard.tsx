@@ -45,7 +45,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-xl border border-border bg-card p-5">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-xl border border-border bg-card card-gradient p-5">
           <h3 className="mb-4 text-base font-semibold text-card-foreground">Receita vs Custo Mensal</h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={monthlyData}>
@@ -64,7 +64,7 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card p-5">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card card-gradient p-5">
           <h3 className="mb-4 text-base font-semibold text-card-foreground">Evolução do Lucro</h3>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={profitData}>
@@ -82,7 +82,7 @@ export default function Dashboard() {
       </div>
 
       {/* Ranking */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="rounded-xl border border-border bg-card p-5">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="rounded-xl border border-border bg-card card-gradient p-5">
         <div className="mb-4 flex items-center gap-2">
           <Target className="h-5 w-5 text-primary" />
           <h3 className="text-base font-semibold text-card-foreground">Ranking de Lucro por Produto</h3>
