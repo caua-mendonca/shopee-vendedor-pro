@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Package,
@@ -10,8 +10,10 @@ import {
   X,
   Sun,
   Moon,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -30,9 +32,16 @@ interface Props {
 }
 
 export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/auth");
+  };
+
   return (
     <aside className="flex h-full flex-col bg-sidebar">
-      {/* Logo */}
       <div className="flex h-14 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
@@ -45,7 +54,6 @@ export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
         </button>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 space-y-0.5 px-3 pt-2">
         {links.map(({ to, label, icon: Icon }) => (
           <NavLink
@@ -67,14 +75,20 @@ export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
         ))}
       </nav>
 
-      {/* Footer */}
-      <div className="px-3 pb-4">
+      <div className="space-y-1 px-3 pb-4">
         <button
           onClick={onToggleTheme}
           className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
         >
           {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           {dark ? "Modo Claro" : "Modo Escuro"}
+        </button>
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive/70 hover:bg-destructive/10 hover:text-destructive transition-all"
+        >
+          <LogOut className="h-4 w-4" />
+          Sair
         </button>
       </div>
     </aside>
