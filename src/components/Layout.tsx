@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import AppSidebar from "./AppSidebar";
 import { useState } from "react";
-import { Menu, X, Moon, Sun } from "lucide-react";
+import { Menu, Moon, Sun, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Layout() {
@@ -9,9 +9,11 @@ export default function Layout() {
   const [dark, setDark] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
-      if (saved === "dark") { document.documentElement.classList.add("dark"); return true; }
+      if (saved === "light") return false;
+      document.documentElement.classList.add("dark");
+      return true;
     }
-    return false;
+    return true;
   });
 
   const toggleTheme = () => {
@@ -25,7 +27,6 @@ export default function Layout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      {/* Mobile overlay */}
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div
@@ -38,24 +39,20 @@ export default function Layout() {
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform lg:relative lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <AppSidebar onClose={() => setSidebarOpen(false)} />
+      <div className={`fixed inset-y-0 left-0 z-40 w-56 transform transition-transform lg:relative lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <AppSidebar onClose={() => setSidebarOpen(false)} dark={dark} onToggleTheme={toggleTheme} />
       </div>
 
-      {/* Main */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-16 items-center justify-between border-b border-border bg-card px-4 lg:px-6">
+        <header className="flex h-14 items-center justify-between border-b border-border bg-card px-4 lg:px-6">
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-foreground">
-            <Menu className="h-6 w-6" />
+            <Menu className="h-5 w-5" />
           </button>
+          <div className="flex items-center gap-2 text-foreground">
+            <FileText className="h-4 w-4" />
+            <span className="text-sm font-semibold">Shopee Seller Dashboard</span>
+          </div>
           <div className="flex-1" />
-          <button
-            onClick={toggleTheme}
-            className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-          >
-            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
         </header>
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <Outlet />

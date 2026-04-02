@@ -3,11 +3,13 @@ import {
   LayoutDashboard,
   Package,
   Factory,
+  Calculator,
   ShoppingCart,
   Megaphone,
   DollarSign,
-  Calculator,
   X,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,25 +17,28 @@ const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/produtos", label: "Produtos", icon: Package },
   { to: "/fornecedores", label: "Fornecedores", icon: Factory },
+  { to: "/calculadora", label: "Calculadora", icon: Calculator },
   { to: "/vendas", label: "Vendas", icon: ShoppingCart },
   { to: "/anuncios", label: "Anúncios", icon: Megaphone },
   { to: "/financeiro", label: "Financeiro", icon: DollarSign },
-  { to: "/calculadora", label: "Calculadora", icon: Calculator },
 ];
 
-export default function AppSidebar({ onClose }: { onClose: () => void }) {
+interface Props {
+  onClose: () => void;
+  dark: boolean;
+  onToggleTheme: () => void;
+}
+
+export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
   return (
-    <aside className="flex h-full flex-col border-r border-sidebar-border bg-sidebar">
+    <aside className="flex h-full flex-col bg-sidebar">
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
+      <div className="flex h-14 items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <ShoppingCart className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
+            <ShoppingCart className="h-4 w-4 text-primary-foreground" />
           </div>
-          <div>
-            <h1 className="text-sm font-bold text-sidebar-foreground leading-tight">Shopee Seller</h1>
-            <p className="text-[10px] font-medium text-muted-foreground">Dashboard Pro</p>
-          </div>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-primary">SHOPEE DASHBOARD</span>
         </div>
         <button onClick={onClose} className="lg:hidden text-sidebar-foreground">
           <X className="h-5 w-5" />
@@ -41,7 +46,7 @@ export default function AppSidebar({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 space-y-1 p-3">
+      <nav className="flex-1 space-y-0.5 px-3 pt-2">
         {links.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
@@ -49,22 +54,28 @@ export default function AppSidebar({ onClose }: { onClose: () => void }) {
             onClick={onClose}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all",
                 isActive
-                  ? "bg-sidebar-accent text-sidebar-primary shadow-sm"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
               )
             }
           >
-            <Icon className="h-4.5 w-4.5" />
+            <Icon className="h-4 w-4" />
             {label}
           </NavLink>
         ))}
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-sidebar-border p-4">
-        <p className="text-[10px] text-muted-foreground text-center">© 2026 Shopee Seller Dashboard</p>
+      <div className="px-3 pb-4">
+        <button
+          onClick={onToggleTheme}
+          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
+        >
+          {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          {dark ? "Modo Claro" : "Modo Escuro"}
+        </button>
       </div>
     </aside>
   );
