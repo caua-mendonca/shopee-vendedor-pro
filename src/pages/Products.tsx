@@ -61,7 +61,7 @@ export default function Products() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="flex items-center justify-between rounded-xl border border-border bg-card px-5 py-4 transition-shadow hover:shadow-md"
+            className="flex items-center justify-between rounded-xl border border-border bg-card card-gradient px-5 py-4 transition-shadow hover:shadow-md"
           >
             <div className="flex items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
