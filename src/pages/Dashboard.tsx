@@ -1,5 +1,5 @@
 import StatCard from "@/components/StatCard";
-import { DollarSign, TrendingUp, ShoppingCart, Package, Target } from "lucide-react";
+import { DollarSign, TrendingUp, ShoppingCart, Target, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -29,77 +29,99 @@ const ranking = [
 
 const fmt = (v: number) => `R$${(v / 1000).toFixed(0)}k`;
 
+const chartTooltipStyle = {
+  background: "hsl(0 0% 7%)",
+  border: "1px solid hsl(0 0% 15%)",
+  borderRadius: 10,
+  color: "hsl(0 0% 92%)",
+  boxShadow: "0 8px 24px -4px rgba(0,0,0,0.5)",
+  padding: "10px 14px",
+  fontSize: 13,
+};
+
 export default function Dashboard() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Visão geral do seu negócio Shopee</p>
+        <p className="text-sm text-muted-foreground mt-1">Visão geral do seu negócio Shopee</p>
       </motion.div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard title="Receita Total" value="R$ 24.600" change="↑ 24.2% vs mês anterior" changeType="positive" icon={DollarSign} index={0} />
-        <StatCard title="Custos Totais" value="R$ 12.800" change="↑ 21.9%" changeType="negative" icon={TrendingUp} index={1} />
-        <StatCard title="Lucro Líquido" value="R$ 11.800" change="↑ 26.9%" changeType="positive" icon={DollarSign} index={2} />
-        <StatCard title="Total Pedidos" value="384" change="↑ 18.5%" changeType="positive" icon={ShoppingCart} index={3} />
+        <StatCard title="Receita Total" value="R$ 24.600" change="24.2% vs mês anterior" changeType="positive" icon={DollarSign} index={0} />
+        <StatCard title="Custos Totais" value="R$ 12.800" change="21.9%" changeType="negative" icon={TrendingUp} index={1} />
+        <StatCard title="Lucro Líquido" value="R$ 11.800" change="26.9%" changeType="positive" icon={DollarSign} index={2} />
+        <StatCard title="Total Pedidos" value="384" change="18.5%" changeType="positive" icon={ShoppingCart} index={3} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-xl border border-border bg-card card-gradient p-5">
-          <h3 className="mb-4 text-base font-semibold text-card-foreground">Receita vs Custo Mensal</h3>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card-static p-6">
+          <h3 className="mb-1 text-sm font-semibold text-card-foreground">Receita vs Custo Mensal</h3>
+          <p className="mb-4 text-xs text-muted-foreground">Últimos 6 meses</p>
           <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={monthlyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={fmt} />
+            <BarChart data={monthlyData} barGap={2}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(0 0% 12%)" vertical={false} />
+              <XAxis dataKey="month" stroke="hsl(0 0% 40%)" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis stroke="hsl(0 0% 40%)" fontSize={12} tickFormatter={fmt} tickLine={false} axisLine={false} />
               <Tooltip
                 formatter={(value: number, name: string) => [`R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, name === "receita" ? "Receita" : "Custo"]}
-                labelFormatter={(label) => label}
-                contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--card-foreground))" }}
+                contentStyle={chartTooltipStyle}
+                cursor={{ fill: "hsl(0 0% 15%)", radius: 4 }}
               />
-              <Legend />
-              <Bar dataKey="receita" name="Receita" fill="hsl(142, 71%, 45%)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="custo" name="Custo" fill="hsl(0, 84%, 60%)" radius={[4, 4, 0, 0]} />
+              <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+              <Bar dataKey="receita" name="Receita" fill="hsl(152, 69%, 40%)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="custo" name="Custo" fill="hsl(0, 70%, 55%)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card card-gradient p-5">
-          <h3 className="mb-4 text-base font-semibold text-card-foreground">Evolução do Lucro</h3>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="card-static p-6">
+          <h3 className="mb-1 text-sm font-semibold text-card-foreground">Evolução do Lucro</h3>
+          <p className="mb-4 text-xs text-muted-foreground">Tendência mensal</p>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={profitData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={fmt} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(0 0% 12%)" vertical={false} />
+              <XAxis dataKey="month" stroke="hsl(0 0% 40%)" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis stroke="hsl(0 0% 40%)" fontSize={12} tickFormatter={fmt} tickLine={false} axisLine={false} />
               <Tooltip
                 formatter={(value: number) => [`R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`, "Lucro"]}
-                contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--card-foreground))" }}
+                contentStyle={chartTooltipStyle}
               />
-              <Line type="monotone" dataKey="lucro" name="Lucro" stroke="hsl(14, 100%, 50%)" strokeWidth={3} dot={{ r: 5, fill: "hsl(14, 100%, 50%)" }} />
+              <Line
+                type="monotone"
+                dataKey="lucro"
+                name="Lucro"
+                stroke="hsl(14, 100%, 50%)"
+                strokeWidth={3}
+                dot={{ r: 5, fill: "hsl(14, 100%, 50%)", stroke: "hsl(0 0% 7%)", strokeWidth: 2 }}
+                activeDot={{ r: 7, stroke: "hsl(14, 100%, 50%)", strokeWidth: 2, fill: "hsl(0 0% 7%)" }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </motion.div>
       </div>
 
       {/* Ranking */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="rounded-xl border border-border bg-card card-gradient p-5">
-        <div className="mb-4 flex items-center gap-2">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="card-static p-6">
+        <div className="mb-5 flex items-center gap-2">
           <Target className="h-5 w-5 text-primary" />
-          <h3 className="text-base font-semibold text-card-foreground">Ranking de Lucro por Produto</h3>
+          <h3 className="text-sm font-semibold text-card-foreground">Ranking de Lucro por Produto</h3>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {ranking.map((item, i) => (
-            <div key={item.name} className="flex items-center justify-between rounded-lg border border-border bg-background px-4 py-3">
+            <div key={item.name} className="group flex items-center justify-between rounded-lg border border-border/50 bg-background px-5 py-3.5 transition-all hover:border-border hover:bg-muted/30">
               <div className="flex items-center gap-4">
-                <span className="text-lg font-bold text-primary">#{i + 1}</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
+                  {i + 1}
+                </span>
                 <div>
                   <p className="text-sm font-semibold text-card-foreground">{item.name}</p>
                   <p className="text-xs text-muted-foreground">{item.vendas} vendas</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-success">R$ {item.lucro.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span>
-                <TrendingUp className="h-4 w-4 text-success" />
+                <ArrowUpRight className="h-4 w-4 text-success opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
           ))}

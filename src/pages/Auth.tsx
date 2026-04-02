@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { ShoppingCart, Mail, Lock, User, Store } from "lucide-react";
+import { ShoppingCart, Mail, Lock, User, Store, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -54,105 +53,88 @@ export default function Auth() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      {/* Background accent glow */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/3 blur-[120px]" />
+      </div>
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md rounded-2xl border border-border bg-card card-gradient-accent p-8 shadow-lg"
+        initial={{ opacity: 0, y: 30, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        className="relative w-full max-w-md card-pro-accent rounded-2xl p-8"
       >
         {/* Logo */}
-        <div className="mb-8 flex flex-col items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-            <ShoppingCart className="h-6 w-6 text-primary-foreground" />
+        <div className="mb-8 flex flex-col items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/20">
+            <ShoppingCart className="h-7 w-7 text-primary-foreground" />
           </div>
           <div className="text-center">
             <h1 className="text-xl font-bold text-foreground">Shopee Seller Dashboard</h1>
-            <p className="text-sm text-muted-foreground">
-              {isLogin ? "Entre na sua conta" : "Crie sua conta de vendedor"}
+            <p className="text-sm text-muted-foreground mt-1">
+              {isLogin ? "Entre na sua conta para continuar" : "Crie sua conta de vendedor"}
             </p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-4 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+            className="mb-4 rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
             {error}
-          </div>
+          </motion.div>
         )}
         {success && (
-          <div className="mb-4 rounded-lg bg-success/10 px-4 py-3 text-sm text-success">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+            className="mb-4 rounded-lg bg-success/10 border border-success/20 px-4 py-3 text-sm text-success">
             {success}
-          </div>
+          </motion.div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
             <>
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-card-foreground">Nome Completo</label>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Nome Completo</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <input
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Seu nome"
-                    required
-                    className="w-full rounded-lg border border-input bg-background py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  />
+                  <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Seu nome" required className="input-pro pl-10" />
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-card-foreground">Nome da Loja</label>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Nome da Loja</label>
                 <div className="relative">
                   <Store className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <input
-                    type="text"
-                    value={storeName}
-                    onChange={(e) => setStoreName(e.target.value)}
-                    placeholder="Nome da sua loja Shopee"
-                    className="w-full rounded-lg border border-input bg-background py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  />
+                  <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} placeholder="Nome da sua loja Shopee" className="input-pro pl-10" />
                 </div>
               </div>
             </>
           )}
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-card-foreground">Email</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu@email.com"
-                required
-                className="w-full rounded-lg border border-input bg-background py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seu@email.com" required className="input-pro pl-10" />
             </div>
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-card-foreground">Senha</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Senha</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mínimo 6 caracteres"
-                required
-                minLength={6}
-                className="w-full rounded-lg border border-input bg-background py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mínimo 6 caracteres" required minLength={6} className="input-pro pl-10" />
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
-          >
-            {loading ? "Carregando..." : isLogin ? "Entrar" : "Criar Conta"}
+          <button type="submit" disabled={loading} className="btn-primary w-full py-3">
+            {loading ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+            ) : (
+              <>
+                {isLogin ? "Entrar" : "Criar Conta"}
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </button>
         </form>
 
@@ -160,7 +142,7 @@ export default function Auth() {
           {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}{" "}
           <button
             onClick={() => { setIsLogin(!isLogin); setError(""); setSuccess(""); }}
-            className="font-semibold text-primary hover:underline"
+            className="font-semibold text-primary hover:underline transition-colors"
           >
             {isLogin ? "Cadastre-se" : "Fazer login"}
           </button>

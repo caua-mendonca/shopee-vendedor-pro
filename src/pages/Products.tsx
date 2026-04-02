@@ -26,9 +26,9 @@ export default function Products() {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Produtos</h1>
-          <p className="text-sm text-muted-foreground">{filtered.length} produtos cadastrados</p>
+          <p className="text-sm text-muted-foreground mt-1">{filtered.length} produtos cadastrados</p>
         </div>
-        <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90">
+        <button className="btn-primary">
           <Plus className="h-4 w-4" /> Novo Produto
         </button>
       </motion.div>
@@ -40,13 +40,13 @@ export default function Products() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nome ou SKU..."
-            className="w-full rounded-lg border border-input bg-background py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="input-pro pl-10"
           />
         </div>
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-input bg-background px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="input-pro w-auto min-w-[180px]"
         >
           {categories.map((c) => (
             <option key={c} value={c}>{c}</option>
@@ -54,37 +54,37 @@ export default function Products() {
         </select>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {filtered.map((p, i) => (
           <motion.div
             key={p.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="flex items-center justify-between rounded-xl border border-border bg-card card-gradient px-5 py-4 transition-shadow hover:shadow-md"
+            className="card-pro flex items-center justify-between px-5 py-4"
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
-                <Package className="h-5 w-5 text-muted-foreground" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/8">
+                <Package className="h-5 w-5 text-primary/70" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-card-foreground">{p.name}</p>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <span>{p.sku}</span>
-                  <span>•</span>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                  <span className="font-mono">{p.sku}</span>
+                  <span className="text-border">•</span>
                   <span>{p.category}</span>
-                  <span className={`ml-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${p.status === "ativo" ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}>
+                  <span className={`badge ${p.status === "ativo" ? "badge-success" : "badge-neutral"}`}>
                     {p.status}
                   </span>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-semibold text-card-foreground">R$ {p.price.toFixed(2).replace(".", ",")}</span>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <button className="hover:text-foreground transition-colors"><Eye className="h-4 w-4" /></button>
-                <button className="hover:text-foreground transition-colors"><Pencil className="h-4 w-4" /></button>
-                <button className="hover:text-destructive transition-colors"><Trash2 className="h-4 w-4" /></button>
+            <div className="flex items-center gap-5">
+              <span className="text-sm font-bold text-card-foreground tabular-nums">R$ {p.price.toFixed(2).replace(".", ",")}</span>
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <button className="rounded-md p-1.5 hover:bg-muted hover:text-foreground transition-colors"><Eye className="h-4 w-4" /></button>
+                <button className="rounded-md p-1.5 hover:bg-muted hover:text-foreground transition-colors"><Pencil className="h-4 w-4" /></button>
+                <button className="rounded-md p-1.5 hover:bg-destructive/10 hover:text-destructive transition-colors"><Trash2 className="h-4 w-4" /></button>
               </div>
             </div>
           </motion.div>

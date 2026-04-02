@@ -28,7 +28,7 @@
     --shopee: 14 100% 50%;
     --shopee-light: 14 100% 60%;
     --shopee-dark: 14 100% 40%;
-    --success: 142 71% 45%;
+    --success: 152 69% 40%;
     --warning: 38 92% 50%;
 
     --sidebar-background: 0 0% 100%;
@@ -42,39 +42,39 @@
   }
 
   .dark {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 90%;
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 90%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 90%;
+    --background: 0 0% 3%;
+    --foreground: 0 0% 92%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 92%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 92%;
     --primary: 14 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 90%;
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 50%;
-    --accent: 14 50% 10%;
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 92%;
+    --muted: 0 0% 11%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 14 40% 9%;
     --accent-foreground: 14 100% 60%;
     --destructive: 0 63% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 14%;
-    --input: 0 0% 14%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
     --ring: 14 100% 50%;
 
     --shopee: 14 100% 50%;
     --shopee-light: 14 100% 60%;
     --shopee-dark: 14 100% 40%;
-    --success: 142 71% 45%;
+    --success: 152 69% 40%;
     --warning: 38 92% 50%;
 
-    --sidebar-background: 0 0% 6%;
-    --sidebar-foreground: 0 0% 90%;
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 0 0% 92%;
     --sidebar-primary: 14 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 14 50% 10%;
-    --sidebar-accent-foreground: 14 100% 60%;
-    --sidebar-border: 0 0% 14%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 92%;
+    --sidebar-border: 0 0% 12%;
     --sidebar-ring: 14 100% 50%;
   }
 }
@@ -84,54 +84,175 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: "Inter", sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   }
   h1, h2, h3, h4 {
     font-family: "Space Grotesk", sans-serif;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer components {
-  .dark .card-gradient {
-    background: linear-gradient(
-      145deg,
-      hsl(0 0% 10%) 0%,
-      hsl(0 0% 7%) 50%,
-      hsl(0 0% 6%) 100%
-    );
-    border-color: hsl(0 0% 16%);
-    box-shadow: 0 4px 24px -4px hsl(0 0% 0% / 0.5),
-                inset 0 1px 0 0 hsl(0 0% 18% / 0.3);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  /* Professional card system */
+  .card-pro {
+    @apply rounded-xl border border-border bg-card;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.2s ease;
   }
 
-  .dark .card-gradient:hover {
-    transform: translateY(-3px);
-    border-color: hsl(0 0% 22%);
-    box-shadow: 0 12px 32px -6px hsl(0 0% 0% / 0.6),
-                0 0 0 1px hsl(0 0% 18% / 0.2),
-                inset 0 1px 0 0 hsl(0 0% 20% / 0.4);
+  .dark .card-pro {
+    background: linear-gradient(160deg, hsl(0 0% 9%) 0%, hsl(0 0% 6%) 100%);
+    border-color: hsl(0 0% 13%);
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.4),
+                inset 0 1px 0 hsl(0 0% 15% / 0.15);
   }
 
-  .dark .card-gradient-accent {
-    background: linear-gradient(
-      145deg,
-      hsl(14 30% 10%) 0%,
-      hsl(0 0% 7%) 60%,
-      hsl(0 0% 6%) 100%
-    );
-    border-color: hsl(14 40% 14%);
-    box-shadow: 0 4px 24px -4px hsl(14 100% 50% / 0.08),
-                inset 0 1px 0 0 hsl(14 60% 20% / 0.2);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  .card-pro:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px hsl(0 0% 0% / 0.15);
   }
 
-  .dark .card-gradient-accent:hover {
-    transform: translateY(-3px);
-    border-color: hsl(14 50% 20%);
-    box-shadow: 0 12px 32px -6px hsl(14 100% 50% / 0.15),
-                0 0 0 1px hsl(14 40% 18% / 0.3),
-                inset 0 1px 0 0 hsl(14 60% 24% / 0.3);
+  .dark .card-pro:hover {
+    border-color: hsl(0 0% 18%);
+    box-shadow: 0 8px 30px -5px hsl(0 0% 0% / 0.5),
+                inset 0 1px 0 hsl(0 0% 18% / 0.2);
+  }
+
+  /* Accent card (login, featured) */
+  .card-pro-accent {
+    @apply rounded-xl border border-border bg-card;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark .card-pro-accent {
+    background: linear-gradient(160deg, hsl(14 20% 9%) 0%, hsl(0 0% 5%) 100%);
+    border-color: hsl(14 30% 13%);
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.4),
+                0 0 40px -10px hsl(14 100% 50% / 0.04),
+                inset 0 1px 0 hsl(14 40% 18% / 0.1);
+  }
+
+  .card-pro-accent:hover {
+    transform: translateY(-2px);
+  }
+
+  .dark .card-pro-accent:hover {
+    border-color: hsl(14 40% 18%);
+    box-shadow: 0 8px 30px -5px hsl(0 0% 0% / 0.5),
+                0 0 50px -10px hsl(14 100% 50% / 0.08),
+                inset 0 1px 0 hsl(14 40% 20% / 0.15);
+  }
+
+  /* Static card (no hover lift — for tables/containers) */
+  .card-static {
+    @apply rounded-xl border border-border bg-card;
+  }
+
+  .dark .card-static {
+    background: linear-gradient(160deg, hsl(0 0% 9%) 0%, hsl(0 0% 6%) 100%);
+    border-color: hsl(0 0% 13%);
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.4),
+                inset 0 1px 0 hsl(0 0% 15% / 0.15);
+  }
+
+  /* Professional table styling */
+  .table-pro {
+    @apply w-full text-sm;
+  }
+
+  .table-pro thead tr {
+    @apply border-b border-border;
+  }
+
+  .table-pro thead th {
+    @apply px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground;
+  }
+
+  .table-pro tbody tr {
+    @apply border-b border-border/50 transition-colors last:border-0;
+  }
+
+  .dark .table-pro tbody tr:hover {
+    background: hsl(0 0% 10%);
+  }
+
+  .table-pro tbody tr:hover {
+    @apply bg-muted/40;
+  }
+
+  .table-pro tbody td {
+    @apply px-5 py-4;
+  }
+
+  /* Professional input */
+  .input-pro {
+    @apply w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm text-foreground
+           placeholder:text-muted-foreground
+           focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary/50
+           transition-all duration-200;
+  }
+
+  .dark .input-pro {
+    background: hsl(0 0% 5%);
+    border-color: hsl(0 0% 15%);
+  }
+
+  .dark .input-pro:focus {
+    border-color: hsl(14 100% 50% / 0.4);
+    box-shadow: 0 0 0 3px hsl(14 100% 50% / 0.1);
+  }
+
+  /* Professional button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5
+           text-sm font-semibold text-primary-foreground
+           shadow-sm transition-all duration-200
+           hover:bg-primary/90 hover:shadow-md
+           active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .dark .btn-primary {
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.3),
+                0 0 12px -2px hsl(14 100% 50% / 0.15);
+  }
+
+  .dark .btn-primary:hover {
+    box-shadow: 0 4px 12px -2px hsl(14 100% 50% / 0.3);
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide;
+  }
+
+  .badge-success {
+    @apply bg-success/10 text-success;
+  }
+
+  .dark .badge-success {
+    background: hsl(152 69% 40% / 0.12);
+    color: hsl(152 69% 55%);
+  }
+
+  .badge-warning {
+    @apply bg-warning/10 text-warning;
+  }
+
+  .badge-danger {
+    @apply bg-destructive/10 text-destructive;
+  }
+
+  .badge-neutral {
+    @apply bg-muted text-muted-foreground;
+  }
+
+  /* Divider with glow */
+  .dark .divider-glow {
+    border-color: hsl(0 0% 12%);
+    box-shadow: 0 1px 0 hsl(0 0% 15% / 0.3);
   }
 }

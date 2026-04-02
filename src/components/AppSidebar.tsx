@@ -11,6 +11,7 @@ import {
   Sun,
   Moon,
   LogOut,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -32,7 +33,7 @@ interface Props {
 }
 
 export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -41,20 +42,30 @@ export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
   };
 
   return (
-    <aside className="flex h-full flex-col bg-sidebar">
-      <div className="flex h-14 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
+    <aside className="flex h-full flex-col border-r border-sidebar-border bg-sidebar">
+      {/* Logo */}
+      <div className="flex h-16 items-center justify-between px-5">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
             <ShoppingCart className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-primary">SHOPEE DASHBOARD</span>
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-widest text-primary">Shopee</span>
+            <p className="text-[10px] font-medium text-muted-foreground -mt-0.5">Seller Dashboard</p>
+          </div>
         </div>
-        <button onClick={onClose} className="lg:hidden text-sidebar-foreground">
-          <X className="h-5 w-5" />
+        <button onClick={onClose} className="lg:hidden rounded-md p-1 text-sidebar-foreground hover:bg-sidebar-accent transition-colors">
+          <X className="h-4 w-4" />
         </button>
       </div>
 
-      <nav className="flex-1 space-y-0.5 px-3 pt-2">
+      {/* Section label */}
+      <div className="px-5 pt-2 pb-1">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">Menu</p>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 space-y-0.5 px-3">
         {links.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
@@ -62,30 +73,45 @@ export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
             onClick={onClose}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all",
+                "group flex items-center justify-between rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-150",
                 isActive
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
               )
             }
           >
-            <Icon className="h-4 w-4" />
-            {label}
+            {({ isActive }) => (
+              <>
+                <div className="flex items-center gap-3">
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </div>
+                {!isActive && (
+                  <ChevronRight className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
+                )}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
 
-      <div className="space-y-1 px-3 pb-4">
+      {/* User & Actions */}
+      <div className="border-t border-sidebar-border divider-glow p-3 space-y-1">
+        {user && (
+          <div className="px-3 py-2 mb-1">
+            <p className="text-[11px] font-medium text-sidebar-foreground/80 truncate">{user.email}</p>
+          </div>
+        )}
         <button
           onClick={onToggleTheme}
-          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"
         >
           {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           {dark ? "Modo Claro" : "Modo Escuro"}
         </button>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive/70 hover:bg-destructive/10 hover:text-destructive transition-all"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-destructive/60 hover:bg-destructive/8 hover:text-destructive transition-all"
         >
           <LogOut className="h-4 w-4" />
           Sair
