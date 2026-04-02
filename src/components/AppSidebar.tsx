@@ -1,10 +1,19 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Package,
   Factory,
   Calculator,
   ShoppingCart,
+  Megaphone,
+  DollarSign,
+  X,
+  Sun,
+  Moon,
+  LogOut,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
   Megaphone,
   DollarSign,
   X,
