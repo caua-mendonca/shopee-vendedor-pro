@@ -40,14 +40,14 @@ export default function Calculator() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <h1 className="text-2xl font-bold text-foreground">Calculadora Shopee</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-foreground">Calculadora Shopee</h1>
         <p className="text-sm text-muted-foreground mt-1">Calcule preços e margens considerando todas as taxas</p>
       </motion.div>
 
       <select
         value={selectedProduct}
         onChange={(e) => handleProductChange(Number(e.target.value))}
-        className="input-pro w-auto min-w-[220px]"
+        className="input-pro w-full sm:w-auto sm:min-w-[220px]"
       >
         {products.map((p, i) => (
           <option key={i} value={i}>{p.name}</option>
@@ -56,14 +56,14 @@ export default function Calculator() {
 
       <div className="grid gap-6 lg:grid-cols-5">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="lg:col-span-3 card-static p-6">
+          className="lg:col-span-3 card-static p-4 sm:p-6">
           <div className="mb-5 flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
               <FileText className="h-4 w-4 text-primary" />
             </div>
             <h3 className="text-sm font-semibold text-card-foreground">Custos e Taxas</h3>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-2">
             {[
               { label: "Custo de Compra (R$)", value: cost, set: setCost, hint: `Melhor fornecedor: R$ ${products[selectedProduct].cost.toFixed(2).replace(".", ",")}` },
               { label: "Comissão Shopee (%)", value: commission, set: setCommission },
@@ -73,21 +73,21 @@ export default function Calculator() {
               { label: "Outros Custos (R$)", value: otherCosts, set: setOtherCosts },
             ].map(({ label, value, set, hint }) => (
               <div key={label}>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</label>
+                <label className="mb-1.5 block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</label>
                 <input
                   type="number"
                   value={value}
                   onChange={(e) => set(e.target.value)}
                   className="input-pro"
                 />
-                {hint && <p className="mt-1 text-[11px] text-muted-foreground/70">{hint}</p>}
+                {hint && <p className="mt-1 text-[11px] text-muted-foreground/70 hidden sm:block">{hint}</p>}
               </div>
             ))}
           </div>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className="lg:col-span-2 card-static p-6">
+          className="lg:col-span-2 card-static p-4 sm:p-6">
           <div className="mb-5 flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
               <CalcIcon className="h-4 w-4 text-primary" />
@@ -113,12 +113,12 @@ export default function Calculator() {
               </div>
             </div>
 
-            <div className="mt-2 rounded-xl border border-success/20 bg-success/5 p-5">
+            <div className="mt-2 rounded-xl border border-success/20 bg-success/5 p-4 sm:p-5">
               <div className="flex items-center gap-2 text-success mb-2">
                 <CheckCircle className="h-4 w-4" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Preço Recomendado</span>
               </div>
-              <p className="text-3xl font-bold text-success tabular-nums">R$ {recommendedPrice.toFixed(2).replace(".", ",")}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-success tabular-nums">R$ {recommendedPrice.toFixed(2).replace(".", ",")}</p>
               <p className="mt-2 text-xs text-muted-foreground">
                 Lucro estimado de R$ {estimatedProfit.toFixed(2).replace(".", ",")} ({marginPercent.toFixed(1)}% de margem)
               </p>

@@ -25,10 +25,10 @@ export default function Products() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Produtos</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Produtos</h1>
           <p className="text-sm text-muted-foreground mt-1">{filtered.length} produtos cadastrados</p>
         </div>
-        <button className="btn-primary">
+        <button className="btn-primary w-full sm:w-auto">
           <Plus className="h-4 w-4" /> Novo Produto
         </button>
       </motion.div>
@@ -46,7 +46,7 @@ export default function Products() {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="input-pro w-auto min-w-[180px]"
+          className="input-pro w-full sm:w-auto sm:min-w-[180px]"
         >
           {categories.map((c) => (
             <option key={c} value={c}>{c}</option>
@@ -61,30 +61,34 @@ export default function Products() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="card-pro flex items-center justify-between px-5 py-4"
+            className="card-pro px-4 py-4 sm:px-5"
           >
-            <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/8">
+            <div className="flex items-start gap-3 sm:items-center sm:gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/8">
                 <Package className="h-5 w-5 text-primary/70" />
               </div>
-              <div>
-                <p className="text-sm font-semibold text-card-foreground">{p.name}</p>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-                  <span className="font-mono">{p.sku}</span>
-                  <span className="text-border">•</span>
-                  <span>{p.category}</span>
-                  <span className={`badge ${p.status === "ativo" ? "badge-success" : "badge-neutral"}`}>
-                    {p.status}
-                  </span>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-card-foreground truncate">{p.name}</p>
+                    <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
+                      <span className="font-mono">{p.sku}</span>
+                      <span className="text-border">•</span>
+                      <span>{p.category}</span>
+                      <span className={`badge ${p.status === "ativo" ? "badge-success" : "badge-neutral"}`}>
+                        {p.status}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between sm:justify-end gap-4">
+                    <span className="text-sm font-bold text-card-foreground tabular-nums">R$ {p.price.toFixed(2).replace(".", ",")}</span>
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <button className="rounded-md p-1.5 hover:bg-muted hover:text-foreground transition-colors"><Eye className="h-4 w-4" /></button>
+                      <button className="rounded-md p-1.5 hover:bg-muted hover:text-foreground transition-colors"><Pencil className="h-4 w-4" /></button>
+                      <button className="rounded-md p-1.5 hover:bg-destructive/10 hover:text-destructive transition-colors"><Trash2 className="h-4 w-4" /></button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-5">
-              <span className="text-sm font-bold text-card-foreground tabular-nums">R$ {p.price.toFixed(2).replace(".", ",")}</span>
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <button className="rounded-md p-1.5 hover:bg-muted hover:text-foreground transition-colors"><Eye className="h-4 w-4" /></button>
-                <button className="rounded-md p-1.5 hover:bg-muted hover:text-foreground transition-colors"><Pencil className="h-4 w-4" /></button>
-                <button className="rounded-md p-1.5 hover:bg-destructive/10 hover:text-destructive transition-colors"><Trash2 className="h-4 w-4" /></button>
               </div>
             </div>
           </motion.div>

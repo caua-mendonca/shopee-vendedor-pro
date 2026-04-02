@@ -14,40 +14,62 @@ export default function Sales() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <h1 className="text-2xl font-bold text-foreground">Vendas</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-foreground">Vendas</h1>
         <p className="text-sm text-muted-foreground mt-1">Histórico de vendas e métricas</p>
       </motion.div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
         <StatCard title="Unidades Vendidas" value="44" icon={Package} index={0} />
         <StatCard title="Receita Total" value="R$ 2.255,60" icon={DollarSign} index={1} />
         <StatCard title="Custo Total" value="R$ 987,00" icon={TrendingUp} index={2} />
         <StatCard title="Lucro Líquido" value="R$ 1.268,60" change="56.2% margem" changeType="positive" icon={DollarSign} index={3} />
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card-static overflow-hidden">
-        <table className="table-pro">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Produto</th>
-              <th className="text-right">Qtd</th>
-              <th className="text-right">Preço Unit.</th>
-              <th className="text-right">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sales.map((s) => (
-              <tr key={s.id}>
-                <td className="text-muted-foreground tabular-nums">{new Date(s.date).toLocaleDateString("pt-BR")}</td>
-                <td className="font-medium text-card-foreground">{s.product}</td>
-                <td className="text-right text-muted-foreground tabular-nums">{s.qty}</td>
-                <td className="text-right text-muted-foreground tabular-nums">R$ {s.price.toFixed(2)}</td>
-                <td className="text-right font-semibold text-card-foreground tabular-nums">R$ {s.total.toFixed(2)}</td>
+      {/* Mobile: card layout / Desktop: table */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+        {/* Desktop table */}
+        <div className="hidden md:block card-static overflow-hidden">
+          <table className="table-pro">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Produto</th>
+                <th className="text-right">Qtd</th>
+                <th className="text-right">Preço Unit.</th>
+                <th className="text-right">Total</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sales.map((s) => (
+                <tr key={s.id}>
+                  <td className="text-muted-foreground tabular-nums">{new Date(s.date).toLocaleDateString("pt-BR")}</td>
+                  <td className="font-medium text-card-foreground">{s.product}</td>
+                  <td className="text-right text-muted-foreground tabular-nums">{s.qty}</td>
+                  <td className="text-right text-muted-foreground tabular-nums">R$ {s.price.toFixed(2)}</td>
+                  <td className="text-right font-semibold text-card-foreground tabular-nums">R$ {s.total.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="md:hidden space-y-3">
+          {sales.map((s, i) => (
+            <motion.div key={s.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+              className="card-pro p-4">
+              <div className="flex items-start justify-between mb-2">
+                <p className="text-sm font-semibold text-card-foreground">{s.product}</p>
+                <span className="text-sm font-bold text-card-foreground tabular-nums">R$ {s.total.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="tabular-nums">{new Date(s.date).toLocaleDateString("pt-BR")}</span>
+                <span className="text-border">•</span>
+                <span>{s.qty} un × R$ {s.price.toFixed(2)}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
     </div>
   );
