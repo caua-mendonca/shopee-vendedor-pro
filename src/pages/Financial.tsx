@@ -19,7 +19,7 @@ const expenses = [
   { name: "Lucro", value: 7259 },
 ];
 
-const COLORS = ["hsl(0, 84%, 60%)", "hsl(38, 92%, 50%)", "hsl(14, 100%, 50%)", "hsl(142, 71%, 45%)"];
+const COLORS = ["hsl(0, 70%, 55%)", "hsl(38, 92%, 50%)", "hsl(14, 100%, 50%)", "hsl(152, 69%, 40%)"];
 
 const detailData = [
   { produto: "Fone Bluetooth TWS", receita: 7787, custo: 2587, taxas: 1245, ads: 125, lucro: 3830, margem: 49.2 },
@@ -37,12 +37,22 @@ const totals = {
 
 const fmtBRL = (v: number) => `R$ ${v.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
 
+const chartTooltipStyle = {
+  background: "hsl(0 0% 7%)",
+  border: "1px solid hsl(0 0% 15%)",
+  borderRadius: 10,
+  color: "hsl(0 0% 92%)",
+  boxShadow: "0 8px 24px -4px rgba(0,0,0,0.5)",
+  padding: "10px 14px",
+  fontSize: 13,
+};
+
 export default function Financial() {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h1 className="text-2xl font-bold text-foreground">Financeiro</h1>
-        <p className="text-sm text-muted-foreground">Análise detalhada de receitas e despesas</p>
+        <p className="text-sm text-muted-foreground mt-1">Análise detalhada de receitas e despesas</p>
       </motion.div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -53,72 +63,79 @@ export default function Financial() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-xl border border-border bg-card card-gradient p-5">
-          <h3 className="mb-4 text-base font-semibold text-card-foreground">Lucro por Produto</h3>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card-static p-6">
+          <h3 className="mb-1 text-sm font-semibold text-card-foreground">Lucro por Produto</h3>
+          <p className="mb-4 text-xs text-muted-foreground">Comparativo entre produtos</p>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={profitByProduct} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => `R$${v}`} />
-              <YAxis dataKey="name" type="category" stroke="hsl(var(--muted-foreground))" fontSize={12} width={120} />
-              <Tooltip formatter={(value: number) => [fmtBRL(value), "Lucro"]} contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--card-foreground))" }} />
-              <Bar dataKey="lucro" name="Lucro" fill="hsl(142, 71%, 45%)" radius={[0, 4, 4, 0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(0 0% 12%)" horizontal={false} />
+              <XAxis type="number" stroke="hsl(0 0% 40%)" fontSize={12} tickFormatter={(v) => `R$${v}`} tickLine={false} axisLine={false} />
+              <YAxis dataKey="name" type="category" stroke="hsl(0 0% 40%)" fontSize={12} width={130} tickLine={false} axisLine={false} />
+              <Tooltip formatter={(value: number) => [fmtBRL(value), "Lucro"]} contentStyle={chartTooltipStyle} />
+              <Bar dataKey="lucro" name="Lucro" fill="hsl(152, 69%, 40%)" radius={[0, 6, 6, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card card-gradient p-5">
-          <h3 className="mb-4 text-base font-semibold text-card-foreground">Composição dos Gastos</h3>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="card-static p-6">
+          <h3 className="mb-1 text-sm font-semibold text-card-foreground">Composição dos Gastos</h3>
+          <p className="mb-4 text-xs text-muted-foreground">Distribuição percentual</p>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
-              <Pie data={expenses} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value" paddingAngle={4}>
+              <Pie data={expenses} cx="50%" cy="50%" innerRadius={65} outerRadius={105} dataKey="value" paddingAngle={3} strokeWidth={0}>
                 {expenses.map((_, i) => (
                   <Cell key={i} fill={COLORS[i]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => [fmtBRL(value)]} contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--card-foreground))" }} />
-              <Legend />
+              <Tooltip formatter={(value: number) => [fmtBRL(value)]} contentStyle={chartTooltipStyle} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
             </PieChart>
           </ResponsiveContainer>
         </motion.div>
       </div>
 
       {/* Detail Table */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="overflow-x-auto rounded-xl border border-border bg-card card-gradient">
-        <div className="p-5 pb-0">
-          <h3 className="text-base font-semibold text-card-foreground">Detalhamento por Produto</h3>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="card-static overflow-hidden">
+        <div className="p-6 pb-0">
+          <h3 className="text-sm font-semibold text-card-foreground">Detalhamento por Produto</h3>
+          <p className="text-xs text-muted-foreground mt-1">Breakdown completo de receitas e custos</p>
         </div>
-        <table className="w-full text-sm mt-4">
+        <table className="table-pro mt-4">
           <thead>
-            <tr className="border-b border-border">
-              <th className="px-5 py-3 text-left font-medium text-muted-foreground">Produto</th>
-              <th className="px-5 py-3 text-right font-medium text-muted-foreground">Receita</th>
-              <th className="px-5 py-3 text-right font-medium text-muted-foreground">Custo</th>
-              <th className="px-5 py-3 text-right font-medium text-muted-foreground">Taxas</th>
-              <th className="px-5 py-3 text-right font-medium text-muted-foreground">Ads</th>
-              <th className="px-5 py-3 text-right font-medium text-muted-foreground">Lucro</th>
-              <th className="px-5 py-3 text-right font-medium text-muted-foreground">Margem</th>
+            <tr>
+              <th>Produto</th>
+              <th className="text-right">Receita</th>
+              <th className="text-right">Custo</th>
+              <th className="text-right">Taxas</th>
+              <th className="text-right">Ads</th>
+              <th className="text-right">Lucro</th>
+              <th className="text-right">Margem</th>
             </tr>
           </thead>
           <tbody>
             {detailData.map((d) => (
-              <tr key={d.produto} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-                <td className="px-5 py-3 font-medium text-card-foreground">{d.produto}</td>
-                <td className="px-5 py-3 text-right text-success">{fmtBRL(d.receita)}</td>
-                <td className="px-5 py-3 text-right text-destructive">{fmtBRL(d.custo)}</td>
-                <td className="px-5 py-3 text-right text-destructive">{fmtBRL(d.taxas)}</td>
-                <td className="px-5 py-3 text-right text-destructive">{fmtBRL(d.ads)}</td>
-                <td className="px-5 py-3 text-right font-semibold text-success">{fmtBRL(d.lucro)}</td>
-                <td className="px-5 py-3 text-right font-semibold text-success">{d.margem}%</td>
+              <tr key={d.produto}>
+                <td className="font-medium text-card-foreground">{d.produto}</td>
+                <td className="text-right text-success tabular-nums">{fmtBRL(d.receita)}</td>
+                <td className="text-right text-destructive tabular-nums">{fmtBRL(d.custo)}</td>
+                <td className="text-right text-destructive tabular-nums">{fmtBRL(d.taxas)}</td>
+                <td className="text-right text-destructive tabular-nums">{fmtBRL(d.ads)}</td>
+                <td className="text-right font-semibold text-success tabular-nums">{fmtBRL(d.lucro)}</td>
+                <td className="text-right">
+                  <span className="badge badge-success">{d.margem}%</span>
+                </td>
               </tr>
             ))}
-            <tr className="bg-muted/30 font-bold">
-              <td className="px-5 py-3 text-card-foreground">TOTAL</td>
-              <td className="px-5 py-3 text-right text-success">{fmtBRL(totals.receita)}</td>
-              <td className="px-5 py-3 text-right text-destructive">{fmtBRL(totals.custo)}</td>
-              <td className="px-5 py-3 text-right text-destructive">{fmtBRL(totals.taxas)}</td>
-              <td className="px-5 py-3 text-right text-destructive">{fmtBRL(totals.ads)}</td>
-              <td className="px-5 py-3 text-right text-success">{fmtBRL(totals.lucro)}</td>
-              <td className="px-5 py-3 text-right text-success">{((totals.lucro / totals.receita) * 100).toFixed(1)}%</td>
+            <tr className="!border-t-2 !border-border font-bold">
+              <td className="text-card-foreground">TOTAL</td>
+              <td className="text-right text-success tabular-nums">{fmtBRL(totals.receita)}</td>
+              <td className="text-right text-destructive tabular-nums">{fmtBRL(totals.custo)}</td>
+              <td className="text-right text-destructive tabular-nums">{fmtBRL(totals.taxas)}</td>
+              <td className="text-right text-destructive tabular-nums">{fmtBRL(totals.ads)}</td>
+              <td className="text-right text-success tabular-nums">{fmtBRL(totals.lucro)}</td>
+              <td className="text-right">
+                <span className="badge badge-success">{((totals.lucro / totals.receita) * 100).toFixed(1)}%</span>
+              </td>
             </tr>
           </tbody>
         </table>

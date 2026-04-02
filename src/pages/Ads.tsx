@@ -17,7 +17,7 @@ export default function Ads() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h1 className="text-2xl font-bold text-foreground">Anúncios</h1>
-        <p className="text-sm text-muted-foreground">Gestão de campanhas Shopee Ads</p>
+        <p className="text-sm text-muted-foreground mt-1">Gestão de campanhas Shopee Ads</p>
       </motion.div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -27,30 +27,30 @@ export default function Ads() {
         <StatCard title="CTR Médio" value={`${((totalClicks / totalImpressions) * 100).toFixed(1)}%`} icon={Megaphone} index={3} />
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="overflow-x-auto rounded-xl border border-border bg-card">
-        <table className="w-full text-sm">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card-static overflow-hidden">
+        <table className="table-pro">
           <thead>
-            <tr className="border-b border-border bg-muted/50">
-              <th className="px-4 py-3 text-left font-medium text-muted-foreground">Produto</th>
-              <th className="px-4 py-3 text-right font-medium text-muted-foreground">Budget</th>
-              <th className="px-4 py-3 text-right font-medium text-muted-foreground">Gasto</th>
-              <th className="px-4 py-3 text-right font-medium text-muted-foreground">Impressões</th>
-              <th className="px-4 py-3 text-right font-medium text-muted-foreground">Cliques</th>
-              <th className="px-4 py-3 text-right font-medium text-muted-foreground">Vendas</th>
-              <th className="px-4 py-3 text-center font-medium text-muted-foreground">Status</th>
+            <tr>
+              <th>Produto</th>
+              <th className="text-right">Budget</th>
+              <th className="text-right">Gasto</th>
+              <th className="text-right">Impressões</th>
+              <th className="text-right">Cliques</th>
+              <th className="text-right">Vendas</th>
+              <th className="text-center">Status</th>
             </tr>
           </thead>
           <tbody>
             {ads.map((a) => (
-              <tr key={a.id} className="border-b border-border last:border-0 transition-colors hover:bg-muted/30">
-                <td className="px-4 py-3 font-medium text-card-foreground">{a.product}</td>
-                <td className="px-4 py-3 text-right text-muted-foreground">R$ {a.budget.toFixed(2)}</td>
-                <td className="px-4 py-3 text-right text-muted-foreground">R$ {a.spent.toFixed(2)}</td>
-                <td className="px-4 py-3 text-right text-muted-foreground">{a.impressions.toLocaleString()}</td>
-                <td className="px-4 py-3 text-right text-muted-foreground">{a.clicks}</td>
-                <td className="px-4 py-3 text-right font-medium text-card-foreground">{a.sales}</td>
-                <td className="px-4 py-3 text-center">
-                  <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${a.status === "Ativo" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}`}>
+              <tr key={a.id}>
+                <td className="font-medium text-card-foreground">{a.product}</td>
+                <td className="text-right text-muted-foreground tabular-nums">R$ {a.budget.toFixed(2)}</td>
+                <td className="text-right text-muted-foreground tabular-nums">R$ {a.spent.toFixed(2)}</td>
+                <td className="text-right text-muted-foreground tabular-nums">{a.impressions.toLocaleString()}</td>
+                <td className="text-right text-muted-foreground tabular-nums">{a.clicks}</td>
+                <td className="text-right font-semibold text-card-foreground tabular-nums">{a.sales}</td>
+                <td className="text-center">
+                  <span className={`badge ${a.status === "Ativo" ? "badge-success" : "badge-warning"}`}>
                     {a.status}
                   </span>
                 </td>
