@@ -122,7 +122,9 @@ export default function Auth() {
           <div className="lg:hidden flex flex-col items-center gap-4 mb-8">
             <div className="relative">
               <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl scale-150" />
-              <img src={shopeeLogo} alt="Shopee" className="relative h-16 w-16 rounded-2xl shadow-xl shadow-primary/20" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-xl shadow-primary/20">
+                <ShoppingCart className="h-8 w-8 text-primary-foreground" />
+              </div>
             </div>
             <div className="text-center">
               <h1 className="text-xl font-bold text-foreground">Seller Dashboard</h1>
