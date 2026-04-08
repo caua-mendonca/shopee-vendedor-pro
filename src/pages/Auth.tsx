@@ -4,7 +4,7 @@ import { Mail, Lock, User, Store, ArrowRight, Eye, EyeOff, ShoppingCart } from "
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import shopeeLogo from "@/assets/shopee-logo.png";
+
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
