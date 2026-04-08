@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, Lock, User, Store, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Store, ArrowRight, Eye, EyeOff, ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import shopeeLogo from "@/assets/shopee-logo.png";
+
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -70,8 +70,10 @@ export default function Auth() {
           className="relative z-10 flex flex-col items-center gap-8 px-12 text-center"
         >
           <div className="relative">
-            <div className="absolute inset-0 rounded-3xl bg-primary/20 blur-2xl scale-150" />
-            <img src={shopeeLogo} alt="Shopee" className="relative h-28 w-28 rounded-3xl shadow-2xl shadow-primary/30" />
+            <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-2xl scale-150" />
+            <div className="relative flex h-28 w-28 items-center justify-center rounded-3xl bg-primary shadow-2xl shadow-primary/30">
+              <ShoppingCart className="h-14 w-14 text-primary-foreground" />
+            </div>
           </div>
           <div className="space-y-3">
             <h2 className="text-3xl font-bold text-foreground">Seller Dashboard</h2>
@@ -120,7 +122,9 @@ export default function Auth() {
           <div className="lg:hidden flex flex-col items-center gap-4 mb-8">
             <div className="relative">
               <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl scale-150" />
-              <img src={shopeeLogo} alt="Shopee" className="relative h-16 w-16 rounded-2xl shadow-xl shadow-primary/20" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-xl shadow-primary/20">
+                <ShoppingCart className="h-8 w-8 text-primary-foreground" />
+              </div>
             </div>
             <div className="text-center">
               <h1 className="text-xl font-bold text-foreground">Seller Dashboard</h1>
