@@ -57,10 +57,11 @@ export default function Auth() {
     <div className="flex min-h-screen bg-background">
       {/* Left side — branding panel (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden items-center justify-center">
-        {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-background" />
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-primary/8 blur-[100px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[80px]" />
+      {/* Warm amber/orange gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2a1508] via-background to-background" />
+        <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-[#ee4d2d]/15 blur-[120px]" />
+        <div className="absolute top-[50px] left-1/3 w-[400px] h-[400px] rounded-full bg-[#c0392b]/10 blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#ee4d2d]/5 blur-[80px]" />
         
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -105,7 +106,8 @@ export default function Auth() {
       <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8">
         {/* Subtle glow on mobile */}
         <div className="pointer-events-none fixed inset-0 overflow-hidden lg:hidden">
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-primary/5 blur-[100px]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[400px] w-[500px] rounded-full bg-[#ee4d2d]/10 blur-[100px]" />
+          <div className="absolute top-[-50px] left-1/3 h-[300px] w-[300px] rounded-full bg-[#c0392b]/8 blur-[80px]" />
         </div>
 
         <motion.div
