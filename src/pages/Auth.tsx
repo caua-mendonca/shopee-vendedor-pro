@@ -106,7 +106,8 @@ export default function Auth() {
       <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8">
         {/* Subtle glow on mobile */}
         <div className="pointer-events-none fixed inset-0 overflow-hidden lg:hidden">
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-primary/5 blur-[100px]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[400px] w-[500px] rounded-full bg-[#ee4d2d]/10 blur-[100px]" />
+          <div className="absolute top-[-50px] left-1/3 h-[300px] w-[300px] rounded-full bg-[#c0392b]/8 blur-[80px]" />
         </div>
 
         <motion.div
