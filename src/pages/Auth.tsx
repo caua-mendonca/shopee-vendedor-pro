@@ -70,8 +70,10 @@ export default function Auth() {
           className="relative z-10 flex flex-col items-center gap-8 px-12 text-center"
         >
           <div className="relative">
-            <div className="absolute inset-0 rounded-3xl bg-primary/20 blur-2xl scale-150" />
-            <img src={shopeeLogo} alt="Shopee" className="relative h-28 w-28 rounded-3xl shadow-2xl shadow-primary/30" />
+            <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-2xl scale-150" />
+            <div className="relative flex h-28 w-28 items-center justify-center rounded-3xl bg-primary shadow-2xl shadow-primary/30">
+              <ShoppingCart className="h-14 w-14 text-primary-foreground" />
+            </div>
           </div>
           <div className="space-y-3">
             <h2 className="text-3xl font-bold text-foreground">Seller Dashboard</h2>
