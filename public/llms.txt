@@ -1,0 +1,14 @@
+# Shopee Seller Dashboard
+
+> Plataforma de gestão e análise de vendas para vendedores Shopee, com métricas em tempo real, controle de produtos, anúncios e relatórios financeiros.
+
+## Pages
+
+- [Dashboard](/): Visão geral de vendas, métricas e desempenho da loja.
+- [Vendas](/sales): Histórico e análise de pedidos.
+- [Anúncios](/ads): Gestão de campanhas e ROI dos anúncios.
+- [Financeiro](/financial): Receitas, despesas e relatórios financeiros.
+- [Produtos](/products): Catálogo, estoque e variações.
+- [Fornecedores](/suppliers): Cadastro e gestão de fornecedores.
+- [Calculadora](/calculator): Cálculo de preços e margens para Shopee.
+- [Login](/auth): Acesso e cadastro de vendedores.
