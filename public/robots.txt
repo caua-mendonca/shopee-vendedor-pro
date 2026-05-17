@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vitrine-pro-dash.lovable.app/sitemap.xml
