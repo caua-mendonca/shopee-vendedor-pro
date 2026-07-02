@@ -9,13 +9,16 @@ import Sales from "./pages/Sales";
 import Ads from "./pages/Ads";
 import Financial from "./pages/Financial";
 import Calculator from "./pages/Calculator";
+import Estoque from "./pages/Estoque";
 import Auth from "./pages/Auth";
+import ShopeeCallback from "./pages/ShopeeCallback";
 
 export default function App() {
   return (
     <AuthProvider>
       <Routes>
         <Route path="/auth" element={<Auth />} />
+        <Route path="/auth/shopee/callback" element={<ShopeeCallback />} />
         <Route
           element={
             <ProtectedRoute>
@@ -30,6 +33,7 @@ export default function App() {
           <Route path="/anuncios" element={<Ads />} />
           <Route path="/financeiro" element={<Financial />} />
           <Route path="/calculadora" element={<Calculator />} />
+          <Route path="/estoque" element={<Estoque />} />
         </Route>
       </Routes>
     </AuthProvider>

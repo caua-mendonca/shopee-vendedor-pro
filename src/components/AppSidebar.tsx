@@ -7,6 +7,7 @@ import {
   ShoppingCart,
   Megaphone,
   DollarSign,
+  Boxes,
   X,
   Sun,
   Moon,
@@ -18,6 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/estoque", label: "Estoque", icon: Boxes },
   { to: "/produtos", label: "Produtos", icon: Package },
   { to: "/fornecedores", label: "Fornecedores", icon: Factory },
   { to: "/calculadora", label: "Calculadora", icon: Calculator },

@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      palmilha_movimentacoes: {
+        Row: {
+          id: string
+          user_id: string
+          tipo: "entrada" | "saida"
+          quantidade: number
+          descricao: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          tipo: "entrada" | "saida"
+          quantidade: number
+          descricao?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          tipo?: "entrada" | "saida"
+          quantidade?: number
+          descricao?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      shopee_tokens: {
+        Row: {
+          id: string
+          user_id: string
+          shop_id: number
+          access_token: string
+          refresh_token: string
+          expire_in: number
+          expires_at: string
+          token_type: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          shop_id: number
+          access_token: string
+          refresh_token: string
+          expire_in: number
+          expires_at: string
+          token_type?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          shop_id?: number
+          access_token?: string
+          refresh_token?: string
+          expire_in?: number
+          expires_at?: string
+          token_type?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
