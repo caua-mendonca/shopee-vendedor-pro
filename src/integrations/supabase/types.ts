@@ -14,11 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
-      palmilha_movimentacoes: {
+      palmilha_lotes: {
         Row: {
           id: string
           user_id: string
-          tipo: "entrada" | "saida"
+          preco_total: number
+          descricao: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          preco_total: number
+          descricao?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          preco_total?: number
+          descricao?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      palmilha_lote_detalhes: {
+        Row: {
+          id: string
+          lote_id: string
+          numeracao: number
+          quantidade: number
+        }
+        Insert: {
+          id?: string
+          lote_id: string
+          numeracao: number
+          quantidade: number
+        }
+        Update: {
+          id?: string
+          lote_id?: string
+          numeracao?: number
+          quantidade?: number
+        }
+        Relationships: []
+      }
+      palmilha_saidas: {
+        Row: {
+          id: string
+          user_id: string
+          numeracao: number
           quantidade: number
           descricao: string | null
           created_at: string
@@ -26,7 +71,7 @@ export type Database = {
         Insert: {
           id?: string
           user_id: string
-          tipo: "entrada" | "saida"
+          numeracao: number
           quantidade: number
           descricao?: string | null
           created_at?: string
@@ -34,7 +79,7 @@ export type Database = {
         Update: {
           id?: string
           user_id?: string
-          tipo?: "entrada" | "saida"
+          numeracao?: number
           quantidade?: number
           descricao?: string | null
           created_at?: string
