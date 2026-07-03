@@ -65,6 +65,7 @@ export type Database = {
           user_id: string
           numeracao: number
           quantidade: number
+          preco_venda: number | null
           descricao: string | null
           created_at: string
         }
@@ -73,6 +74,7 @@ export type Database = {
           user_id: string
           numeracao: number
           quantidade: number
+          preco_venda?: number | null
           descricao?: string | null
           created_at?: string
         }
@@ -81,8 +83,135 @@ export type Database = {
           user_id?: string
           numeracao?: number
           quantidade?: number
+          preco_venda?: number | null
           descricao?: string | null
           created_at?: string
+        }
+        Relationships: []
+      }
+      produtos: {
+        Row: {
+          id: string
+          user_id: string
+          nome: string
+          categoria: string
+          sku: string | null
+          preco_custo: number
+          preco_venda: number | null
+          estoque_atual: number
+          estoque_minimo: number
+          unidade: string
+          ativo: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          nome: string
+          categoria?: string
+          sku?: string | null
+          preco_custo?: number
+          preco_venda?: number | null
+          estoque_atual?: number
+          estoque_minimo?: number
+          unidade?: string
+          ativo?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          nome?: string
+          categoria?: string
+          sku?: string | null
+          preco_custo?: number
+          preco_venda?: number | null
+          estoque_atual?: number
+          estoque_minimo?: number
+          unidade?: string
+          ativo?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      produto_movimentacoes: {
+        Row: {
+          id: string
+          produto_id: string
+          user_id: string
+          tipo: string
+          quantidade: number
+          preco_unitario: number | null
+          descricao: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          produto_id: string
+          user_id: string
+          tipo: string
+          quantidade: number
+          preco_unitario?: number | null
+          descricao?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          produto_id?: string
+          user_id?: string
+          tipo?: string
+          quantidade?: number
+          preco_unitario?: number | null
+          descricao?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      fornecedores: {
+        Row: {
+          id: string
+          user_id: string
+          nome: string
+          cnpj: string | null
+          contato_nome: string | null
+          contato_telefone: string | null
+          contato_email: string | null
+          prazo_pagamento_dias: number
+          observacoes: string | null
+          ativo: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          nome: string
+          cnpj?: string | null
+          contato_nome?: string | null
+          contato_telefone?: string | null
+          contato_email?: string | null
+          prazo_pagamento_dias?: number
+          observacoes?: string | null
+          ativo?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          nome?: string
+          cnpj?: string | null
+          contato_nome?: string | null
+          contato_telefone?: string | null
+          contato_email?: string | null
+          prazo_pagamento_dias?: number
+          observacoes?: string | null
+          ativo?: boolean
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }

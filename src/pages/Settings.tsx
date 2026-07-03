@@ -12,6 +12,8 @@ import {
   Lock,
   CheckCircle2,
   AlertTriangle,
+  BellRing,
+  BellOff,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -55,6 +57,23 @@ export default function Settings() {
   const [storeName, setStoreName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
+
+  // Notificações
+  const [notifPermission, setNotifPermission] = useState<NotificationPermission>(
+    typeof Notification !== "undefined" ? Notification.permission : "default"
+  );
+
+  async function handleRequestNotif() {
+    if (typeof Notification === "undefined") { toast.error("Seu navegador não suporta notificações."); return; }
+    const result = await Notification.requestPermission();
+    setNotifPermission(result);
+    if (result === "granted") {
+      new Notification("Seller Pro", { body: "Alertas de estoque ativados!", icon: "/icons/icon.svg" });
+      toast.success("Notificações ativadas!");
+    } else {
+      toast.error("Permissão negada. Ative manualmente nas configurações do navegador.");
+    }
+  }
 
   // Preferências
   const [commission, setCommission] = useState("14");
@@ -325,6 +344,41 @@ export default function Settings() {
             </button>
           </div>
         </form>
+      </Section>
+
+      {/* ── Notificações ── */}
+      <Section title="Notificações" description="Alertas de estoque baixo no navegador e celular (PWA)" delay={0.13}>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${notifPermission === "granted" ? "bg-emerald-500/10" : "bg-muted"}`}>
+              {notifPermission === "granted"
+                ? <BellRing className="h-5 w-5 text-emerald-500" />
+                : <BellOff className="h-5 w-5 text-muted-foreground" />}
+            </div>
+            <div>
+              <p className="text-sm font-medium text-card-foreground">
+                {notifPermission === "granted" ? "Notificações ativas" : notifPermission === "denied" ? "Permissão bloqueada" : "Notificações desativadas"}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {notifPermission === "granted"
+                  ? "Você receberá alertas quando o estoque ficar baixo."
+                  : notifPermission === "denied"
+                  ? "Desbloqueie nas configurações do seu navegador."
+                  : "Ative para receber alertas de estoque baixo."}
+              </p>
+            </div>
+          </div>
+          {notifPermission !== "denied" && notifPermission !== "granted" && (
+            <button onClick={handleRequestNotif} className="btn-primary shrink-0">
+              <Bell className="h-4 w-4" /> Ativar alertas
+            </button>
+          )}
+          {notifPermission === "granted" && (
+            <span className="flex items-center gap-1.5 text-xs text-emerald-500 shrink-0">
+              <CheckCircle2 className="h-4 w-4" /> Ativo
+            </span>
+          )}
+        </div>
       </Section>
 
       {/* ── Conta ── */}
