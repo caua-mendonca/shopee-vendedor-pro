@@ -1,0 +1,3 @@
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS meta_pares_mes    INTEGER       NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS meta_receita_mes  NUMERIC(10,2) NOT NULL DEFAULT 0;

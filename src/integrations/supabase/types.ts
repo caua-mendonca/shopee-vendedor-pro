@@ -266,6 +266,8 @@ export type Database = {
           shopee_commission: number
           target_margin: number
           stock_alert_threshold: number
+          meta_pares_mes: number
+          meta_receita_mes: number
         }
         Insert: {
           avatar_url?: string | null
@@ -278,6 +280,8 @@ export type Database = {
           shopee_commission?: number
           target_margin?: number
           stock_alert_threshold?: number
+          meta_pares_mes?: number
+          meta_receita_mes?: number
         }
         Update: {
           avatar_url?: string | null
@@ -290,6 +294,8 @@ export type Database = {
           shopee_commission?: number
           target_margin?: number
           stock_alert_threshold?: number
+          meta_pares_mes?: number
+          meta_receita_mes?: number
         }
         Relationships: []
       }
