@@ -14,8 +14,10 @@ import {
   ChevronDown,
   ChevronUp,
   Receipt,
+  Upload,
 } from "lucide-react";
 import { toast } from "sonner";
+import ImportarCSVModal from "@/components/estoque/ImportarCSVModal";
 import {
   SIZES,
   useEstoqueData,
@@ -354,7 +356,7 @@ function RegistrarVendaModal({ stats, onClose, onConfirm, loading }: RegistrarVe
 // ── Page ────────────────────────────────────────────────────────────────────
 
 export default function Estoque() {
-  const [modal, setModal] = useState<"compra" | "venda" | null>(null);
+  const [modal, setModal] = useState<"compra" | "venda" | "csv" | null>(null);
   const { lotes, saidas, stats, isLoading } = useEstoqueData();
   const { novaCompra, registrarVenda } = useEstoqueMutations();
 
@@ -372,7 +374,11 @@ export default function Estoque() {
           <h1 className="text-xl sm:text-2xl font-bold text-foreground">Estoque de Palmilhas</h1>
           <p className="text-sm text-muted-foreground mt-1">Controle por numeração, lotes e histórico de preços</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => setModal("csv")}
+            className="flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:bg-muted/60 transition-all">
+            <Upload className="h-4 w-4" /> Importar CSV
+          </button>
           <button onClick={() => setModal("venda")} disabled={stats.totalEstoque === 0}
             className="flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/8 px-4 py-2 text-sm font-semibold text-rose-500 hover:bg-rose-500/15 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
             <PackageMinus className="h-4 w-4" /> Registrar Venda
@@ -458,6 +464,11 @@ export default function Estoque() {
       </motion.div>
 
       {/* Modals */}
+      <AnimatePresence>
+        {modal === "csv" && (
+          <ImportarCSVModal onClose={() => setModal(null)} />
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {modal === "compra" && (
           <NovaCompraModal
