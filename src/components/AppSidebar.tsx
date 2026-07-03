@@ -13,6 +13,7 @@ import {
   Moon,
   LogOut,
   ChevronRight,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -104,6 +105,30 @@ export default function AppSidebar({ onClose, dark, onToggleTheme }: Props) {
             <p className="text-[11px] font-medium text-sidebar-foreground/80 truncate">{user.email}</p>
           </div>
         )}
+        <NavLink
+          to="/configuracoes"
+          onClick={onClose}
+          className={({ isActive }) =>
+            cn(
+              "group flex items-center justify-between rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-150",
+              isActive
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            )
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <div className="flex items-center gap-3">
+                <Settings className="h-4 w-4" />
+                Configurações
+              </div>
+              {!isActive && (
+                <ChevronRight className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
+              )}
+            </>
+          )}
+        </NavLink>
         <button
           onClick={onToggleTheme}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all"

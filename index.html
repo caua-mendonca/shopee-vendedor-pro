@@ -2,18 +2,32 @@
 <html lang="pt-BR" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shopee Seller Dashboard — Gestão de Vendas</title>
-    <meta name="description" content="Plataforma completa de gestão e análise de vendas para vendedores Shopee. Métricas em tempo real, controle de produtos e relatório financeiro." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Seller Pro — Gestão de Vendas Shopee</title>
+    <meta name="description" content="Gerencie suas vendas na Shopee com inteligência. Controle de estoque, calculadora de preços e importação de pedidos." />
+    <meta name="application-name" content="Seller Pro" />
+    <meta name="theme-color" content="#ff4d00" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Seller Pro" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Favicon / icons -->
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-maskable.svg" />
+
+    <!-- SEO -->
     <link rel="canonical" href="https://vitrine-pro-dash.lovable.app/" />
-    <meta property="og:title" content="Shopee Seller Dashboard — Gestão de Vendas" />
-    <meta property="og:description" content="Plataforma completa de gestão e análise de vendas para vendedores Shopee. Métricas em tempo real, controle de produtos e relatório financeiro." />
+    <meta property="og:title" content="Seller Pro — Gestão de Vendas Shopee" />
+    <meta property="og:description" content="Gerencie suas vendas na Shopee com inteligência." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://vitrine-pro-dash.lovable.app/" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"WebSite","name":"Shopee Seller Dashboard","url":"https://vitrine-pro-dash.lovable.app/"}
-    </script>
+    <meta name="twitter:card" content="summary" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -21,5 +35,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

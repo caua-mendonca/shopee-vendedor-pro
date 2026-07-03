@@ -10,12 +10,14 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useEstoqueData } from "@/hooks/useEstoque";
+import { useProfile } from "@/hooks/useProfile";
 
 const BRL = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 export default function Calculator() {
   const { stats, isLoading } = useEstoqueData();
+  const { profile } = useProfile();
 
   const [useRealCost, setUseRealCost] = useState(true);
   const [cost, setCost] = useState("");
@@ -25,6 +27,13 @@ export default function Calculator() {
   const [packaging, setPackaging] = useState("2");
   const [otherCosts, setOtherCosts] = useState("0");
   const [desiredMargin, setDesiredMargin] = useState("30");
+
+  // Sync defaults from profile preferences
+  useEffect(() => {
+    if (!profile) return;
+    setCommission(String(profile.shopee_commission));
+    setDesiredMargin(String(profile.target_margin));
+  }, [profile]);
 
   // Sync real cost from stock whenever toggle or data changes
   useEffect(() => {

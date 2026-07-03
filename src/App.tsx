@@ -10,6 +10,7 @@ import Ads from "./pages/Ads";
 import Financial from "./pages/Financial";
 import Calculator from "./pages/Calculator";
 import Estoque from "./pages/Estoque";
+import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/financeiro" element={<Financial />} />
           <Route path="/calculadora" element={<Calculator />} />
           <Route path="/estoque" element={<Estoque />} />
+          <Route path="/configuracoes" element={<Settings />} />
         </Route>
       </Routes>
     </AuthProvider>
