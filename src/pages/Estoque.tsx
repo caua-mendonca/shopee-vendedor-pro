@@ -21,6 +21,8 @@ import {
   ArrowUpCircle,
   ArrowDownCircle,
   Tag,
+  History,
+  CalendarDays,
 } from "lucide-react";
 import { toast } from "sonner";
 import ImportarCSVModal from "@/components/estoque/ImportarCSVModal";
@@ -704,10 +706,178 @@ function ProdutosTab() {
   );
 }
 
+// ── Histórico de Saídas ──────────────────────────────────────────────────────
+
+type FiltroHistorico = "mes" | "anterior" | "tudo";
+
+function HistoricoTab({ saidas }: { saidas: ReturnType<typeof useEstoqueData>["saidas"] }) {
+  const [filtro, setFiltro] = useState<FiltroHistorico>("mes");
+
+  const now = new Date();
+  const filtered = saidas.filter((s) => {
+    const d = new Date(s.created_at);
+    if (filtro === "mes")
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    if (filtro === "anterior") {
+      const prev = new Date(now.getFullYear(), now.getMonth() - 1);
+      return d.getMonth() === prev.getMonth() && d.getFullYear() === prev.getFullYear();
+    }
+    return true;
+  });
+
+  const totalPares = filtered.reduce((a, s) => a + s.quantidade, 0);
+  const comPreco = filtered.filter((s) => s.preco_venda != null);
+  const totalReceita = comPreco.reduce((a, s) => a + Number(s.preco_venda!) * s.quantidade, 0);
+  const ticketMedio = comPreco.length > 0
+    ? totalReceita / comPreco.reduce((a, s) => a + s.quantidade, 0)
+    : 0;
+
+  const LABELS: Record<FiltroHistorico, string> = {
+    mes: "Este mês",
+    anterior: "Mês anterior",
+    tudo: "Todos",
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* Filtros */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex gap-1 rounded-xl bg-muted/50 p-1 w-fit">
+          {(["mes", "anterior", "tudo"] as FiltroHistorico[]).map((f) => (
+            <button key={f} onClick={() => setFiltro(f)}
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                filtro === f ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}>
+              {LABELS[f]}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <CalendarDays className="h-3.5 w-3.5" />
+          <span>{filtered.length} registro{filtered.length !== 1 ? "s" : ""}</span>
+        </div>
+      </div>
+
+      {/* Stats */}
+      {filtered.length > 0 && (
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: "Pares vendidos", value: `${totalPares}`, color: "text-orange-500" },
+            { label: "Receita total", value: totalReceita > 0 ? BRL(totalReceita) : "—", color: "text-emerald-500" },
+            { label: "Ticket médio", value: ticketMedio > 0 ? BRL(ticketMedio) : "—", color: "text-blue-500" },
+          ].map((s) => (
+            <div key={s.label} className="card-pro px-4 py-3 text-center">
+              <p className="text-[11px] text-muted-foreground">{s.label}</p>
+              <p className={`text-base font-bold tabular-nums mt-0.5 ${s.color}`}>{s.value}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Tabela — desktop */}
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
+            <History className="h-7 w-7 text-muted-foreground" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-card-foreground">Nenhuma venda neste período</p>
+            <p className="text-xs text-muted-foreground mt-1">Registre vendas em "Palmilhas" para ver o histórico aqui.</p>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Desktop */}
+          <div className="hidden md:block card-static overflow-hidden">
+            <table className="table-pro">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th className="text-center">Numeração</th>
+                  <th className="text-center">Qtd</th>
+                  <th className="text-right">Preço/par</th>
+                  <th className="text-right">Total</th>
+                  <th>Observação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((s) => (
+                  <tr key={s.id}>
+                    <td className="text-muted-foreground text-xs whitespace-nowrap">
+                      {new Date(s.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" })}
+                    </td>
+                    <td className="text-center">
+                      <span className="inline-flex items-center justify-center h-6 w-10 rounded-lg bg-primary/10 text-xs font-bold text-primary">
+                        Nº {s.numeracao}
+                      </span>
+                    </td>
+                    <td className="text-center font-semibold text-card-foreground tabular-nums">{s.quantidade}</td>
+                    <td className="text-right tabular-nums">
+                      {s.preco_venda != null
+                        ? <span className="text-emerald-500 font-medium">{BRL(Number(s.preco_venda))}</span>
+                        : <span className="text-muted-foreground text-xs">—</span>}
+                    </td>
+                    <td className="text-right tabular-nums font-semibold">
+                      {s.preco_venda != null
+                        ? <span className="text-emerald-500">{BRL(Number(s.preco_venda) * s.quantidade)}</span>
+                        : <span className="text-muted-foreground text-xs">—</span>}
+                    </td>
+                    <td className="text-muted-foreground text-xs max-w-[160px] truncate">
+                      {s.descricao ?? <span className="opacity-40">—</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="border-t-2 border-border font-bold">
+                  <td colSpan={2} className="text-xs text-muted-foreground">TOTAL</td>
+                  <td className="text-center text-card-foreground tabular-nums">{totalPares}</td>
+                  <td />
+                  <td className="text-right text-emerald-500 tabular-nums">
+                    {totalReceita > 0 ? BRL(totalReceita) : "—"}
+                  </td>
+                  <td />
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-2.5">
+            {filtered.map((s) => (
+              <div key={s.id} className="card-pro px-4 py-3 flex items-center gap-3">
+                <span className="flex h-9 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xs font-bold text-primary">
+                  {s.numeracao}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-card-foreground">
+                    {s.quantidade} par{s.quantidade !== 1 ? "es" : ""}
+                    {s.preco_venda != null && <span className="text-emerald-500 ml-2">{BRL(Number(s.preco_venda) * s.quantidade)}</span>}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    {new Date(s.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" })}
+                    {s.descricao && ` · ${s.descricao}`}
+                  </p>
+                </div>
+                {s.preco_venda != null && (
+                  <span className="text-xs font-bold text-emerald-500 tabular-nums shrink-0">
+                    {BRL(Number(s.preco_venda))}
+                    <span className="text-muted-foreground font-normal">/par</span>
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ── Page ────────────────────────────────────────────────────────────────────
 
 export default function Estoque() {
-  const [tab, setTab] = useState<"palmilhas" | "produtos">("palmilhas");
+  const [tab, setTab] = useState<"palmilhas" | "produtos" | "historico">("palmilhas");
   const [modal, setModal] = useState<"compra" | "venda" | "csv" | null>(null);
   const { lotes, saidas, stats, isLoading } = useEstoqueData();
   const { novaCompra, registrarVenda } = useEstoqueMutations();
@@ -745,18 +915,25 @@ export default function Estoque() {
 
       {/* Tabs */}
       <div className="flex gap-1 rounded-xl bg-muted/50 p-1 w-fit">
-        {(["palmilhas", "produtos"] as const).map((t) => (
+        {(["palmilhas", "produtos", "historico"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5 ${
               tab === t ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
             }`}>
-            {t === "palmilhas" ? "Palmilhas" : "Outros Produtos"}
+            {t === "historico" && <History className="h-3.5 w-3.5" />}
+            {t === "palmilhas" ? "Palmilhas" : t === "produtos" ? "Outros Produtos" : "Histórico"}
+            {t === "historico" && saidas.length > 0 && (
+              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-primary/20 text-primary text-[10px] font-bold px-1">
+                {saidas.length}
+              </span>
+            )}
           </button>
         ))}
       </div>
 
       {/* Conteúdo por aba */}
       {tab === "produtos" && <ProdutosTab />}
+      {tab === "historico" && <HistoricoTab saidas={saidas} />}
 
       {tab === "palmilhas" && <>
 

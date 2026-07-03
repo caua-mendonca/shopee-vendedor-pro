@@ -15,6 +15,7 @@ export interface FinanceiroData {
   totalVendas: number;
   custoMedio: number;
   hasRevenueData: boolean;
+  mesAtual: { pares: number; receita: number };
   mensal: Array<{ mes: string; receita: number; custo: number; lucro: number; vendas: number }>;
   porNumeracao: Array<{ numeracao: number; quantidade: number; receita: number }>;
 }
@@ -48,6 +49,16 @@ export function useFinanceiro() {
       const totalInvestido = lotes.reduce((a, l) => a + Number(l.preco_total), 0);
       const totalComprado = detalhes.reduce((a, d) => a + d.quantidade, 0);
       const custoMedio = totalComprado > 0 ? totalInvestido / totalComprado : 0;
+
+      const now = new Date();
+      const saidasMesAtual = saidas.filter(s => {
+        const d = new Date(s.created_at);
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      });
+      const mesAtual = {
+        pares: saidasMesAtual.reduce((a, s) => a + s.quantidade, 0),
+        receita: saidasMesAtual.filter(s => s.preco_venda != null).reduce((a, s) => a + Number(s.preco_venda!) * s.quantidade, 0),
+      };
 
       const saidasComPreco = saidas.filter((s) => s.preco_venda != null);
       const hasRevenueData = saidasComPreco.length > 0;
@@ -92,7 +103,7 @@ export function useFinanceiro() {
       return {
         totalInvestido, totalReceita, totalTaxas, totalCustoVendido,
         lucroLiquido, margemMedia, totalVendas, custoMedio, hasRevenueData,
-        mensal, porNumeracao,
+        mesAtual, mensal, porNumeracao,
       };
     },
     enabled: !!user,

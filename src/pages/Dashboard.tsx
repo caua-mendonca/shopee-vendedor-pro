@@ -92,6 +92,70 @@ export default function Dashboard() {
         <StatCard title="Lucro Líquido" value={BRL(fin?.lucroLiquido ?? 0)} change={fin?.hasRevenueData ? `${fin.margemMedia.toFixed(1)}% margem` : "—"} changeType={(fin?.lucroLiquido ?? 0) >= 0 ? "positive" : "negative"} icon={ShoppingCart} index={3} />
       </div>
 
+      {/* Meta do mês */}
+      {((profile?.meta_pares_mes ?? 0) > 0 || (profile?.meta_receita_mes ?? 0) > 0) && (
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+          className="card-static p-4 sm:p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <Target className="h-5 w-5 text-primary" />
+            <h3 className="text-sm font-semibold text-card-foreground">Meta do Mês</h3>
+            <span className="ml-auto text-xs text-muted-foreground">{new Date().toLocaleString("pt-BR", { month: "long", year: "numeric" })}</span>
+          </div>
+          <div className="space-y-5">
+            {(profile?.meta_pares_mes ?? 0) > 0 && (() => {
+              const atual = fin?.mesAtual.pares ?? 0;
+              const meta = profile!.meta_pares_mes;
+              const pct = Math.min(100, (atual / meta) * 100);
+              const done = atual >= meta;
+              return (
+                <div>
+                  <div className="mb-1.5 flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">Pares vendidos</span>
+                    <span className={`font-semibold tabular-nums ${done ? "text-success" : "text-card-foreground"}`}>
+                      {atual} / {meta} pares
+                    </span>
+                  </div>
+                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${pct}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                      className={`h-full rounded-full ${done ? "bg-success" : "bg-primary"}`}
+                    />
+                  </div>
+                  <p className="mt-1 text-[11px] text-muted-foreground">{pct.toFixed(0)}% da meta{done ? " — Concluída!" : ""}</p>
+                </div>
+              );
+            })()}
+            {(profile?.meta_receita_mes ?? 0) > 0 && (() => {
+              const atual = fin?.mesAtual.receita ?? 0;
+              const meta = profile!.meta_receita_mes;
+              const pct = Math.min(100, (atual / meta) * 100);
+              const done = atual >= meta;
+              return (
+                <div>
+                  <div className="mb-1.5 flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">Faturamento</span>
+                    <span className={`font-semibold tabular-nums ${done ? "text-success" : "text-card-foreground"}`}>
+                      {BRL(atual)} / {BRL(meta)}
+                    </span>
+                  </div>
+                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${pct}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                      className={`h-full rounded-full ${done ? "bg-success" : "bg-orange-500"}`}
+                    />
+                  </div>
+                  <p className="mt-1 text-[11px] text-muted-foreground">{pct.toFixed(0)}% da meta{done ? " — Concluída!" : ""}</p>
+                </div>
+              );
+            })()}
+          </div>
+        </motion.div>
+      )}
+
       <div className="grid gap-6 lg:grid-cols-2">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card-static p-4 sm:p-6">
           <h3 className="mb-1 text-sm font-semibold text-card-foreground">

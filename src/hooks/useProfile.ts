@@ -11,6 +11,8 @@ export interface UserProfile {
   shopee_commission: number;
   target_margin: number;
   stock_alert_threshold: number;
+  meta_pares_mes: number;
+  meta_receita_mes: number;
   updated_at?: string;
 }
 
@@ -21,6 +23,8 @@ const DEFAULTS: Omit<UserProfile, "user_id"> = {
   shopee_commission: 14,
   target_margin: 30,
   stock_alert_threshold: 3,
+  meta_pares_mes: 0,
+  meta_receita_mes: 0,
 };
 
 export function useProfile() {
@@ -53,6 +57,8 @@ export function useProfile() {
         shopee_commission: Number(data.shopee_commission ?? DEFAULTS.shopee_commission),
         target_margin: Number(data.target_margin ?? DEFAULTS.target_margin),
         stock_alert_threshold: Number(data.stock_alert_threshold ?? DEFAULTS.stock_alert_threshold),
+        meta_pares_mes: Number(data.meta_pares_mes ?? 0),
+        meta_receita_mes: Number(data.meta_receita_mes ?? 0),
       } as UserProfile;
     },
     enabled: !!user,

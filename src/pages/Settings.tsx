@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   BellRing,
   BellOff,
+  Target,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -75,6 +76,10 @@ export default function Settings() {
     }
   }
 
+  // Metas mensais
+  const [metaPares, setMetaPares] = useState("0");
+  const [metaReceita, setMetaReceita] = useState("0");
+
   // Preferências
   const [commission, setCommission] = useState("14");
   const [margin, setMargin] = useState("30");
@@ -89,6 +94,8 @@ export default function Settings() {
     setCommission(String(profile.shopee_commission));
     setMargin(String(profile.target_margin));
     setAlertThreshold(String(profile.stock_alert_threshold));
+    setMetaPares(String(profile.meta_pares_mes));
+    setMetaReceita(String(profile.meta_receita_mes));
   }, [profile]);
 
   async function handleSavePerfil(e: React.FormEvent) {
@@ -341,6 +348,50 @@ export default function Settings() {
               ) : (
                 <><Save className="h-4 w-4" /> Salvar preferências</>
               )}
+            </button>
+          </div>
+        </form>
+      </Section>
+
+      {/* ── Metas mensais ── */}
+      <Section title="Metas Mensais" description="Define metas de pares vendidos e faturamento exibidas no Dashboard" delay={0.12}>
+        <form onSubmit={async (e) => {
+          e.preventDefault();
+          try {
+            await updateProfile.mutateAsync({
+              meta_pares_mes: parseInt(metaPares) || 0,
+              meta_receita_mes: parseFloat(metaReceita) || 0,
+            });
+            toast.success("Metas salvas!");
+          } catch (err: any) { toast.error(err.message); }
+        }} className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <Target className="h-3.5 w-3.5" /> Meta de pares / mês
+              </label>
+              <div className="relative">
+                <input type="number" min="0" value={metaPares} onChange={(e) => setMetaPares(e.target.value)} className="input-pro pr-14" />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">pares</span>
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">0 = sem meta de pares</p>
+            </div>
+            <div>
+              <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <Target className="h-3.5 w-3.5" /> Meta de faturamento / mês
+              </label>
+              <div className="relative">
+                <input type="number" min="0" step="0.01" value={metaReceita} onChange={(e) => setMetaReceita(e.target.value)} className="input-pro pl-8" />
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">R$</span>
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">0 = sem meta de faturamento</p>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <button type="submit" disabled={updateProfile.isPending} className="btn-primary">
+              {updateProfile.isPending
+                ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                : <><Save className="h-4 w-4" /> Salvar metas</>}
             </button>
           </div>
         </form>
