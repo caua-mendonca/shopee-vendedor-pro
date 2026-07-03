@@ -1,0 +1,44 @@
+{
+  "name": "Seller Pro",
+  "short_name": "Seller Pro",
+  "description": "Gerencie suas vendas na Shopee com inteligência",
+  "theme_color": "#ff4d00",
+  "background_color": "#080808",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "pt-BR",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Estoque",
+      "short_name": "Estoque",
+      "description": "Controle de estoque de palmilhas",
+      "url": "/estoque",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Calculadora",
+      "short_name": "Calcular",
+      "description": "Calculadora de preço de venda",
+      "url": "/calculadora",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#ff4d00"/>
+  <text x="256" y="210" text-anchor="middle" font-family="'Space Grotesk', 'Inter', system-ui, sans-serif" font-size="170" font-weight="700" fill="#ffffff" letter-spacing="-4">SP</text>
+  <text x="256" y="370" text-anchor="middle" font-family="'Space Grotesk', 'Inter', system-ui, sans-serif" font-size="72" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="8">PRO</text>
+</svg>

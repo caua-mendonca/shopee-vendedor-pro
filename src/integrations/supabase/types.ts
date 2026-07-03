@@ -134,6 +134,9 @@ export type Database = {
           store_name: string | null
           updated_at: string
           user_id: string
+          shopee_commission: number
+          target_margin: number
+          stock_alert_threshold: number
         }
         Insert: {
           avatar_url?: string | null
@@ -143,6 +146,9 @@ export type Database = {
           store_name?: string | null
           updated_at?: string
           user_id: string
+          shopee_commission?: number
+          target_margin?: number
+          stock_alert_threshold?: number
         }
         Update: {
           avatar_url?: string | null
@@ -152,6 +158,9 @@ export type Database = {
           store_name?: string | null
           updated_at?: string
           user_id?: string
+          shopee_commission?: number
+          target_margin?: number
+          stock_alert_threshold?: number
         }
         Relationships: []
       }
