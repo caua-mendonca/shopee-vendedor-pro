@@ -1,6 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
 import AppSidebar from "./AppSidebar";
-import { useState } from "react";
+import SearchModal from "./SearchModal";
+import NotificationsPanel from "./NotificationsPanel";
+import { useState, useEffect, useRef } from "react";
 import { Menu, Bell, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,11 +14,18 @@ const pageTitles: Record<string, string> = {
   "/anuncios": "Anúncios",
   "/financeiro": "Financeiro",
   "/calculadora": "Calculadora",
+  "/estoque": "Estoque",
+  "/configuracoes": "Configurações",
 };
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifCount, setNotifCount] = useState(0);
+  const notifRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
   const [dark, setDark] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
@@ -36,7 +45,24 @@ export default function Layout() {
     });
   };
 
-  const pageTitle = pageTitles[location.pathname] || "Dashboard";
+  // Ctrl+K / Cmd+K abre busca
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+        setNotifOpen(false);
+      }
+      if (e.key === "Escape") {
+        setSearchOpen(false);
+        setNotifOpen(false);
+      }
+    }
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
+  const pageTitle = pageTitles[location.pathname] ?? "Dashboard";
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -66,14 +92,45 @@ export default function Layout() {
 
           <div className="flex-1" />
 
-          <div className="flex items-center gap-2">
-            <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+          {/* Barra de busca hint — desktop */}
+          <button
+            onClick={() => { setSearchOpen(true); setNotifOpen(false); }}
+            className="hidden sm:flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted/70 hover:text-foreground transition-all w-44"
+          >
+            <Search className="h-3.5 w-3.5 shrink-0" />
+            <span className="flex-1 text-left">Buscar…</span>
+            <kbd className="rounded border border-border bg-background px-1 py-0.5 text-[10px]">⌃K</kbd>
+          </button>
+
+          <div className="flex items-center gap-1">
+            {/* Botão busca — mobile */}
+            <button
+              onClick={() => { setSearchOpen(true); setNotifOpen(false); }}
+              className="sm:hidden rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            >
               <Search className="h-4 w-4" />
             </button>
-            <button className="relative rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary" />
-            </button>
+
+            {/* Botão notificações */}
+            <div ref={notifRef} className="relative">
+              <button
+                onClick={() => { setNotifOpen((v) => !v); setSearchOpen(false); }}
+                className="relative rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              >
+                <Bell className="h-4 w-4" />
+                {notifCount > 0 && (
+                  <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">
+                    {notifCount > 9 ? "9+" : notifCount}
+                  </span>
+                )}
+              </button>
+
+              <NotificationsPanel
+                open={notifOpen}
+                onClose={() => setNotifOpen(false)}
+                onCountChange={setNotifCount}
+              />
+            </div>
           </div>
         </header>
 
@@ -81,6 +138,8 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }
