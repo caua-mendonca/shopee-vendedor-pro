@@ -11,6 +11,8 @@ import Financial from "./pages/Financial";
 import Calculator from "./pages/Calculator";
 import Estoque from "./pages/Estoque";
 import Auth from "./pages/Auth";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import ShopeeCallback from "./pages/ShopeeCallback";
 
 export default function App() {
@@ -18,6 +20,8 @@ export default function App() {
     <AuthProvider>
       <Routes>
         <Route path="/auth" element={<Auth />} />
+        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+        <Route path="/auth/reset-password" element={<ResetPassword />} />
         <Route path="/auth/shopee/callback" element={<ShopeeCallback />} />
         <Route
           element={

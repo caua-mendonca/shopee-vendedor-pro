@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, TrendingUp, Package, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+
+const FEATURES = [
+  { icon: TrendingUp,  label: "Vendas em tempo real",    desc: "Dashboard atualizado ao vivo" },
+  { icon: Package,     label: "Controle de estoque",     desc: "Por produto, variação e tamanho" },
+  { icon: ShieldCheck, label: "Dados seguros",           desc: "Criptografia de ponta a ponta" },
+];
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,7 +33,6 @@ export default function Auth() {
     setError("");
     setSuccess("");
     setLoading(true);
-
     try {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -55,36 +60,91 @@ export default function Auth() {
   return (
     <div className="flex min-h-screen bg-background">
 
-      {/* Left panel — typographic branding (desktop only) */}
-      <div className="hidden lg:flex lg:w-5/12 relative overflow-hidden items-center justify-start px-16">
-        {/* Warm radial glow */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
+      {/* ── Left panel ─────────────────────────────────────────────────────── */}
+      <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden flex-col justify-between px-16 py-14">
 
-        {/* Decorative circle */}
-        <div className="pointer-events-none absolute -bottom-40 -left-40 h-[560px] w-[560px] rounded-full border border-primary/8" />
-        <div className="pointer-events-none absolute -bottom-20 -left-20 h-[360px] w-[360px] rounded-full border border-primary/5" />
+        {/* Gradient mesh */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a02] via-background to-background" />
+          <div className="absolute top-[-80px] left-[-60px] h-[500px] w-[500px] rounded-full bg-primary/12 blur-[120px]" />
+          <div className="absolute top-[30%] left-[20%] h-[300px] w-[300px] rounded-full bg-primary/7 blur-[100px]" />
+          <div className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-primary/5 blur-[140px]" />
+          {/* Subtle grid */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage:
+                "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
+        </div>
 
+        {/* Wordmark */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.6 }}
           className="relative z-10"
         >
-          <h1 className="text-[80px] font-bold leading-none tracking-tight text-foreground">
-            Seller<br />
-            <span className="text-primary">Pro</span>
-          </h1>
-          <p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-[220px]">
-            Gerencie suas vendas na Shopee com inteligência.
-          </p>
+          <span className="text-sm font-semibold tracking-widest text-primary/70 uppercase">
+            Seller Pro
+          </span>
         </motion.div>
+
+        {/* Center content */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="relative z-10 flex-1 flex flex-col justify-center items-center"
+        >
+          <div className="w-full max-w-[320px]">
+          <h1 className="text-[72px] font-bold leading-[1.05] tracking-tight text-foreground">
+            Gerencie<br />
+            suas<br />
+            <span className="text-primary">vendas.</span>
+          </h1>
+          <p className="mt-6 text-muted-foreground text-base leading-relaxed max-w-[280px]">
+            Tudo que você precisa para vender mais na Shopee em um único painel.
+          </p>
+
+          {/* Feature list */}
+          <div className="mt-10 space-y-4">
+            {FEATURES.map((f, i) => (
+              <motion.div
+                key={f.label}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 + i * 0.1 }}
+                className="flex items-center gap-4"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15">
+                  <f.icon className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">{f.label}</p>
+                  <p className="text-xs text-muted-foreground">{f.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          </div>
+        </motion.div>
+
+        {/* Bottom tagline */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="relative z-10 text-xs text-muted-foreground/40"
+        >
+          © {new Date().getFullYear()} Seller Pro · Todos os direitos reservados
+        </motion.p>
       </div>
 
-      {/* Divider (desktop) */}
-      <div className="hidden lg:block w-px bg-border/30 self-stretch my-12" />
-
-      {/* Right panel — form */}
-      <div className="flex flex-1 items-center justify-center px-8 py-12 sm:px-16">
+      {/* ── Right panel ────────────────────────────────────────────────────── */}
+      <div className="flex flex-1 items-center justify-center px-6 py-12 sm:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,173 +153,177 @@ export default function Auth() {
         >
           {/* Mobile brand */}
           <div className="lg:hidden mb-10">
-            <h1 className="text-5xl font-bold leading-none tracking-tight text-foreground">
-              Seller<span className="text-primary">Pro</span>
+            <span className="text-sm font-semibold tracking-widest text-primary/70 uppercase">
+              Seller Pro
+            </span>
+            <h1 className="mt-3 text-4xl font-bold leading-tight text-foreground">
+              Gerencie suas<br />
+              <span className="text-primary">vendas.</span>
             </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Gerencie suas vendas na Shopee com inteligência.
-            </p>
           </div>
 
-          {/* Heading */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-              {isLogin ? "Bem-vindo de volta" : "Criar conta"}
-            </h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              {isLogin
-                ? "Entre com suas credenciais para continuar"
-                : "Preencha os dados para criar sua conta"}
-            </p>
-          </div>
+          {/* Card */}
+          <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl shadow-2xl shadow-black/20 px-8 py-8">
 
-          {/* Alerts */}
-          <AnimatePresence mode="wait">
-            {error && (
-              <motion.div
-                key="error"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mb-5 rounded-lg bg-destructive/8 border border-destructive/20 px-4 py-3 text-sm text-destructive"
-              >
-                {error}
-              </motion.div>
-            )}
-            {success && (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mb-5 rounded-lg bg-success/8 border border-success/20 px-4 py-3 text-sm text-success"
-              >
-                {success}
-              </motion.div>
-            )}
-          </AnimatePresence>
+            {/* Heading */}
+            <div className="mb-7">
+              <h2 className="text-xl font-semibold tracking-tight text-card-foreground">
+                {isLogin ? "Bem-vindo de volta" : "Criar sua conta"}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {isLogin ? "Entre para acessar o painel" : "Preencha os dados abaixo"}
+              </p>
+            </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Alerts */}
             <AnimatePresence mode="wait">
-              {!isLogin && (
+              {error && (
                 <motion.div
-                  key="signup-fields"
+                  key="error"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="space-y-4 overflow-hidden"
+                  className="mb-5 rounded-lg bg-destructive/8 border border-destructive/20 px-4 py-3 text-sm text-destructive"
                 >
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-muted-foreground">
-                      Nome completo
-                    </label>
-                    <input
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Seu nome completo"
-                      required
-                      className="input-pro"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-muted-foreground">
-                      Nome da loja
-                    </label>
-                    <input
-                      type="text"
-                      value={storeName}
-                      onChange={(e) => setStoreName(e.target.value)}
-                      placeholder="Nome da sua loja Shopee"
-                      className="input-pro"
-                    />
-                  </div>
+                  {error}
+                </motion.div>
+              )}
+              {success && (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-5 rounded-lg bg-success/8 border border-success/20 px-4 py-3 text-sm text-success"
+                >
+                  {success}
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-muted-foreground">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu@email.com"
-                required
-                className="input-pro"
-              />
-            </div>
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <AnimatePresence mode="wait">
+                {!isLogin && (
+                  <motion.div
+                    key="signup-fields"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-4 overflow-hidden"
+                  >
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+                        Nome completo
+                      </label>
+                      <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Seu nome"
+                        required
+                        className="input-pro"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+                        Nome da loja
+                      </label>
+                      <input
+                        type="text"
+                        value={storeName}
+                        onChange={(e) => setStoreName(e.target.value)}
+                        placeholder="Sua loja Shopee"
+                        className="input-pro"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <label className="text-sm font-medium text-muted-foreground">Senha</label>
-                {isLogin && (
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seu@email.com"
+                  required
+                  className="input-pro"
+                />
+              </div>
+
+              <div>
+                <div className="mb-1.5 flex items-center justify-between">
+                  <label className="text-xs font-medium text-muted-foreground">Senha</label>
+                  {isLogin && (
+                    <Link
+                      to="/auth/forgot-password"
+                      className="text-xs text-muted-foreground/50 hover:text-primary transition-colors"
+                    >
+                      Esqueceu a senha?
+                    </Link>
+                  )}
+                </div>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    minLength={6}
+                    className="input-pro pr-11"
+                  />
                   <button
                     type="button"
-                    className="text-xs text-primary hover:text-primary/80 transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
                   >
-                    Esqueceu a senha?
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
-                )}
+                </div>
               </div>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Mínimo 6 caracteres"
-                  required
-                  minLength={6}
-                  className="input-pro pr-11"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-primary w-full py-3 !mt-6 group"
+              >
+                {loading ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                ) : (
+                  <>
+                    {isLogin ? "Entrar" : "Criar conta"}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border/40" />
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-card px-3 text-xs text-muted-foreground/40">ou</span>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full py-3 mt-2 group"
-            >
-              {loading ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
-              ) : (
-                <>
-                  {isLogin ? "Entrar" : "Criar conta"}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Switch mode */}
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}{" "}
-            <button
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError("");
-                setSuccess("");
-              }}
-              className="font-medium text-primary hover:text-primary/80 transition-colors"
-            >
-              {isLogin ? "Cadastre-se gratuitamente" : "Fazer login"}
-            </button>
+            {/* Switch mode */}
+            <p className="text-center text-sm text-muted-foreground">
+              {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}{" "}
+              <button
+                onClick={() => { setIsLogin(!isLogin); setError(""); setSuccess(""); }}
+                className="font-semibold text-primary hover:text-primary/80 transition-colors"
+              >
+                {isLogin ? "Cadastre-se" : "Entrar"}
+              </button>
+            </p>
           </div>
-
-          {/* Footer */}
-          <p className="mt-10 text-center text-xs text-muted-foreground/40">
-            Ao continuar, você concorda com os Termos de Uso e Política de Privacidade.
-          </p>
         </motion.div>
       </div>
     </div>
