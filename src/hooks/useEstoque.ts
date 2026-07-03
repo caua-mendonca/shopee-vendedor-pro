@@ -25,6 +25,7 @@ export interface SaidaRow {
   user_id: string;
   numeracao: number;
   quantidade: number;
+  preco_venda: number | null;
   descricao: string | null;
   created_at: string;
 }
@@ -50,6 +51,7 @@ export interface RegistrarVendaInput {
   numeracao: number;
   quantidade: number;
   descricao: string;
+  preco_venda?: number | null;
 }
 
 function buildStats(lotes: LoteComDetalhes[], saidas: SaidaRow[]): EstoqueStats {
@@ -198,6 +200,7 @@ export function useEstoqueMutations() {
         numeracao: input.numeracao,
         quantidade: input.quantidade,
         descricao: input.descricao || null,
+        preco_venda: input.preco_venda ?? null,
       });
       if (error) throw error;
     },

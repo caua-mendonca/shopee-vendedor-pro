@@ -1,10 +1,15 @@
 import StatCard from "@/components/StatCard";
-import { DollarSign, TrendingUp, ShoppingCart, Target, ArrowUpRight } from "lucide-react";
+import { DollarSign, TrendingUp, ShoppingCart, Target, ArrowUpRight, AlertTriangle, Boxes, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, Legend,
+  LineChart, Line, AreaChart, Area, Legend,
 } from "recharts";
+import { useEstoqueData } from "@/hooks/useEstoque";
+import { useFinanceiro } from "@/hooks/useFinanceiro";
+import { useProfile } from "@/hooks/useProfile";
+import { useProdutos } from "@/hooks/useProdutos";
+import { Link } from "react-router-dom";
 
 const monthlyData = [
   { month: "Jan", receita: 12400, custo: 7200 },
@@ -39,7 +44,24 @@ const chartTooltipStyle = {
   fontSize: 13,
 };
 
+const BRL = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
 export default function Dashboard() {
+  const { stats } = useEstoqueData();
+  const { data: fin } = useFinanceiro();
+  const { profile } = useProfile();
+  const { alertas: prodAlertas } = useProdutos();
+
+  const threshold = profile?.stock_alert_threshold ?? 3;
+  const sizeAlertas = Object.entries(stats.stockMap)
+    .filter(([, qty]) => qty > 0 && qty <= threshold)
+    .map(([size]) => `Nº ${size}`);
+  const totalAlertas = sizeAlertas.length + prodAlertas.length;
+
+  // Notificação de estoque baixo ao abrir o dashboard
+  const chartData = fin?.mensal.length ? fin.mensal : monthlyData;
+  const hasRealData = (fin?.mensal.length ?? 0) > 0;
+
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -47,19 +69,37 @@ export default function Dashboard() {
         <p className="text-sm text-muted-foreground mt-1">Visão geral do seu negócio Shopee</p>
       </motion.div>
 
+      {/* Alertas de estoque */}
+      {totalAlertas > 0 && (
+        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
+          className="flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/8 px-4 py-3 text-sm text-amber-500">
+          <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="font-medium">Estoque baixo detectado</p>
+            <div className="flex flex-wrap gap-1.5 mt-1.5">
+              {sizeAlertas.map(s => <span key={s} className="rounded-md bg-amber-500/20 px-1.5 py-0.5 text-xs font-bold">{s}</span>)}
+              {prodAlertas.map(p => <span key={p.id} className="rounded-md bg-amber-500/20 px-1.5 py-0.5 text-xs font-bold">{p.nome}</span>)}
+            </div>
+          </div>
+          <Link to="/estoque" className="shrink-0 text-xs font-semibold underline underline-offset-2 hover:text-amber-400 transition-colors">Ver estoque</Link>
+        </motion.div>
+      )}
+
       <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
-        <StatCard title="Receita Total" value="R$ 24.600" change="24.2% vs mês anterior" changeType="positive" icon={DollarSign} index={0} />
-        <StatCard title="Custos Totais" value="R$ 12.800" change="21.9%" changeType="negative" icon={TrendingUp} index={1} />
-        <StatCard title="Lucro Líquido" value="R$ 11.800" change="26.9%" changeType="positive" icon={DollarSign} index={2} />
-        <StatCard title="Total Pedidos" value="384" change="18.5%" changeType="positive" icon={ShoppingCart} index={3} />
+        <StatCard title="Investido em Estoque" value={BRL(stats.totalInvestido || 0)} change={`${stats.totalEstoque} pares disponíveis`} changeType="neutral" icon={Boxes} index={0} />
+        <StatCard title="Receita de Vendas" value={BRL(fin?.totalReceita ?? 0)} change={fin?.hasRevenueData ? `${fin.totalVendas} pares vendidos` : "sem dados ainda"} changeType={fin?.hasRevenueData ? "positive" : "neutral"} icon={DollarSign} index={1} />
+        <StatCard title="Taxas Shopee" value={BRL(fin?.totalTaxas ?? 0)} changeType="negative" icon={TrendingUp} index={2} />
+        <StatCard title="Lucro Líquido" value={BRL(fin?.lucroLiquido ?? 0)} change={fin?.hasRevenueData ? `${fin.margemMedia.toFixed(1)}% margem` : "—"} changeType={(fin?.lucroLiquido ?? 0) >= 0 ? "positive" : "negative"} icon={ShoppingCart} index={3} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card-static p-4 sm:p-6">
-          <h3 className="mb-1 text-sm font-semibold text-card-foreground">Receita vs Custo Mensal</h3>
-          <p className="mb-4 text-xs text-muted-foreground">Últimos 6 meses</p>
+          <h3 className="mb-1 text-sm font-semibold text-card-foreground">
+            {hasRealData ? "Receita vs Custo (real)" : "Receita vs Custo Mensal"}
+          </h3>
+          <p className="mb-4 text-xs text-muted-foreground">{hasRealData ? "Dados reais do seu estoque" : "Dados ilustrativos — registre vendas para ver dados reais"}</p>
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={monthlyData} barGap={2}>
+            <BarChart data={hasRealData ? chartData : monthlyData} barGap={2}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(0 0% 12%)" vertical={false} />
               <XAxis dataKey="month" stroke="hsl(0 0% 40%)" fontSize={11} tickLine={false} axisLine={false} />
               <YAxis stroke="hsl(0 0% 40%)" fontSize={11} tickFormatter={fmt} tickLine={false} axisLine={false} width={45} />
@@ -79,7 +119,7 @@ export default function Dashboard() {
           <h3 className="mb-1 text-sm font-semibold text-card-foreground">Evolução do Lucro</h3>
           <p className="mb-4 text-xs text-muted-foreground">Tendência mensal</p>
           <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={profitData}>
+            <LineChart data={hasRealData ? chartData.map(d => ({ month: d.mes ?? d.month, lucro: d.lucro })) : profitData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(0 0% 12%)" vertical={false} />
               <XAxis dataKey="month" stroke="hsl(0 0% 40%)" fontSize={11} tickLine={false} axisLine={false} />
               <YAxis stroke="hsl(0 0% 40%)" fontSize={11} tickFormatter={fmt} tickLine={false} axisLine={false} width={45} />
